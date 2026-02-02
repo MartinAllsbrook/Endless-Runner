@@ -4,8 +4,11 @@ using UnityEngine;
 public class InputReader : MonoBehaviour
 {
     public static InputReader Instance { get; private set; }
-    public static event Action<float> Move = delegate { };
     private @InputSystemActions controls;
+
+    // Input events
+    public static event Action<float> Move = delegate { };
+    public static event Action Shoot = delegate { };
 
     void Awake()
     {
@@ -33,5 +36,7 @@ public class InputReader : MonoBehaviour
     {
         controls.Default.Move.performed += ctx => Move(ctx.ReadValue<float>());
         controls.Default.Move.canceled += ctx => Move(0f);
+
+        controls.Default.Shoot.performed += ctx => Shoot();
     }
 }

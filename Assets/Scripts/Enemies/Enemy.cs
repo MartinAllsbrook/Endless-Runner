@@ -1,8 +1,26 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
+    [SerializeField] float speed = 2f;
+
+    Health health;
+
+    void Awake()
+    {
+        health = GetComponent<Health>();
+    }
+
+    void OnEnable()
+    {
+        health.OnDeath += Die;   
+    }
+
+    void OnDisable()
+    {
+        health.OnDeath -= Die;
+    }
 
     void Update()
     {
@@ -16,5 +34,10 @@ class Enemy : MonoBehaviour
             float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
         }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
