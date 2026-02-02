@@ -10,8 +10,9 @@ public class Health : MonoBehaviour
     float currentHealth;
 
     // Events
-    public event Action<float> OnHealthChanged;
-    public event Action OnDeath;
+    public event Action<float> OnHealthChanged = delegate { };
+    public event Action<float> OnHealthChangedPercent = delegate { };
+    public event Action OnDeath = delegate { };
 
     void Start()
     {
@@ -21,7 +22,8 @@ public class Health : MonoBehaviour
     public void SetHealth(float health)
     {
         currentHealth = Mathf.Clamp(health, 0f, maxHealth);
-        OnHealthChanged?.Invoke(currentHealth);
+        OnHealthChanged.Invoke(currentHealth);
+        OnHealthChangedPercent.Invoke(currentHealth / maxHealth);
 
         if (currentHealth <= 0f)
         {
@@ -41,7 +43,7 @@ public class Health : MonoBehaviour
 
     void Die()
     {
-        OnDeath?.Invoke();
+        OnDeath.Invoke();
     }
 
     public bool IsDead()

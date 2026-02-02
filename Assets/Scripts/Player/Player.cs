@@ -9,6 +9,7 @@ class Player : MonoBehaviour
     public static Player Instance;
 
     [SerializeField] Projectile projectilePrefab;
+    [SerializeField] HealthBar healthBar;
 
     float steerInput = 0f;
     float throttleInput = 0f;
@@ -37,6 +38,7 @@ class Player : MonoBehaviour
     void OnEnable()
     {
         health.OnDeath += Die;
+        health.OnHealthChangedPercent += healthBar.SetFill;
 
         // Inputs
         InputReader.Move += HandleSteer;
@@ -47,6 +49,7 @@ class Player : MonoBehaviour
     void OnDisable()
     {
         health.OnDeath -= Die;
+        health.OnHealthChangedPercent -= healthBar.SetFill;
 
         // Inputs
         InputReader.Move -= HandleSteer;
