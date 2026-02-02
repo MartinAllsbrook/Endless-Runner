@@ -4,20 +4,22 @@ using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(CarMovement))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SwivelGun))]
 class Player : MonoBehaviour
 {
     public static Player Instance;
 
-    [SerializeField] Projectile projectilePrefab;
     [SerializeField] HealthBar healthBar;
 
     float steerInput = 0f;
     float throttleInput = 0f;
+    bool shootInput = false;
 
-    ObjectPool<Projectile> projectilePool;
-
+    SwivelGun swivelGun;
     Health health;
     CarMovement carMovement;
+    Rigidbody2D rb;
 
     void Awake()
     {
@@ -28,11 +30,10 @@ class Player : MonoBehaviour
             Destroy(gameObject);
 
         // Get components
+        swivelGun = GetComponent<SwivelGun>();
         health = GetComponent<Health>();
         carMovement = GetComponent<CarMovement>();
-
-        // Initialize projectile pool
-        projectilePool = new ObjectPool<Projectile>(projectilePrefab, 32);
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void OnEnable()
@@ -55,6 +56,15 @@ class Player : MonoBehaviour
         InputReader.Move -= HandleSteer;
         InputReader.Shoot -= HandleShoot;
         InputReader.Throttle -= HandleThrottle;
+    }
+
+    void Update()
+    {
+        // Handle shooting
+        if (shootInput)
+        {
+            swivelGun.TryFire();
+        }
     }
 
     void FixedUpdate()
@@ -82,28 +92,9 @@ class Player : MonoBehaviour
         throttleInput = value;
     }
 
-    void HandleShoot()
+    void HandleShoot(bool shoot)
     {
-        // Get mouse position in world space (2D)
-        Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-        mouseWorldPos.z = 0f;
-
-        // Get direction from player to mouse
-        Vector3 playerPos = transform.position;
-        Vector3 direction = (mouseWorldPos - playerPos).normalized;
-
-        // Calculate rotation towards cursor
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        Quaternion rotation = Quaternion.Euler(0, 0, angle);
-
-        // Get projectile from pool
-        Projectile proj = projectilePool.Get(playerPos, rotation);
-        if (proj != null)
-        {
-            proj.SetPool(projectilePool);
-            proj.Initialize(rotation, 10f, 10f); // Example speed/range, adjust as needed
-        }
+        shootInput = shoot;
     }
     #endregion
 }

@@ -3,34 +3,32 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    float speed;
     float range;
-    Vector3 direction;
     Vector3 startPosition;
     ObjectPool<Projectile> pool;
+
+    Rigidbody2D rb;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     public void SetPool(ObjectPool<Projectile> _pool)
     {
         pool = _pool;
     }
 
-    public void Initialize(Quaternion rotation, float _speed, float _range)
+    public void Initialize(Vector2 velocity, float _range)
     {
-        speed = _speed;
+        rb.linearVelocity = velocity;
         range = _range;
-        
-        direction = rotation * Vector3.up; // For 2D, use Vector3.up as the forward direction in XY plane
-        direction.z = 0f; // Ensure no Z movement
 
         startPosition = transform.position;
-        transform.rotation = rotation;
     }
 
     void Update()
     {
-        float moveDistance = speed * Time.deltaTime;
-        transform.position += direction * moveDistance;
-
         if (Vector3.Distance(startPosition, transform.position) >= range)
         {
             ReturnToPool();
