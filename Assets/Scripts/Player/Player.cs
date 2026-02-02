@@ -2,29 +2,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(CarMovement))]
 class Player : MonoBehaviour
 {
     public static Player Instance;
 
     [SerializeField] Projectile projectilePrefab;
-    
-    [Header("Car Movement")]
-    [SerializeField] float acceleration = 10f;
-    [SerializeField] float maxSpeed = 15f;
-    [SerializeField] float turnSpeed = 150f;
-    [SerializeField] float brakeForce = 20f;
-    [SerializeField] float drag = 2f;
 
     float steerInput = 0f;
     float throttleInput = 0f;
-    float brakeInput = 0f;
 
     ObjectPool<Projectile> projectilePool;
 
-    Rigidbody2D rb;
     Health health;
+    CarMovement carMovement;
 
     void Awake()
     {
@@ -35,8 +27,8 @@ class Player : MonoBehaviour
             Destroy(gameObject);
 
         // Get components
-        rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
+        carMovement = GetComponent<CarMovement>();
 
         // Initialize projectile pool
         projectilePool = new ObjectPool<Projectile>(projectilePrefab, 32);
@@ -50,7 +42,6 @@ class Player : MonoBehaviour
         InputReader.Move += HandleSteer;
         InputReader.Shoot += HandleShoot;
         InputReader.Throttle += HandleThrottle;
-        InputReader.Brake += HandleBrake;
     }
 
     void OnDisable()
@@ -61,54 +52,13 @@ class Player : MonoBehaviour
         InputReader.Move -= HandleSteer;
         InputReader.Shoot -= HandleShoot;
         InputReader.Throttle -= HandleThrottle;
-        InputReader.Brake -= HandleBrake;
     }
 
     void FixedUpdate()
     {
-        // Apply car-like movement
-        ApplyMovement();
-    }
-
-    void ApplyMovement()
-    {
-        // Get current velocity
-        Vector2 velocity = rb.linearVelocity;
-        float currentSpeed = velocity.magnitude;
-
-        // Calculate forward direction
-        Vector2 forward = transform.up;
-
-        // Apply throttle (acceleration)
-        if (throttleInput > 0.1f)
-        {
-            if (currentSpeed < maxSpeed)
-            {
-                rb.AddForce(forward * acceleration * throttleInput, ForceMode2D.Force);
-            }
-        }
-
-        // Apply brake
-        if (brakeInput > 0.1f)
-        {
-            rb.AddForce(-velocity.normalized * brakeForce * brakeInput, ForceMode2D.Force);
-        }
-
-        // Apply steering (only when moving)
-        if (Mathf.Abs(steerInput) > 0.1f && currentSpeed > 0.5f)
-        {
-            float turnAmount = steerInput * turnSpeed * currentSpeed * Time.fixedDeltaTime;
-            // Reduce turn speed at higher velocities for more realistic handling
-            float speedFactor = Mathf.Clamp01(currentSpeed / maxSpeed);
-            rb.angularVelocity = -turnAmount * speedFactor * 10f;
-        }
-        else
-        {
-            rb.angularVelocity = 0f;
-        }
-
-        // Apply drag
-        rb.linearVelocity = Vector2.Lerp(velocity, Vector2.zero, drag * Time.fixedDeltaTime);
+        // Send input to CarMovement component
+        Vector2 movementInput = new Vector2(steerInput, throttleInput);
+        carMovement.SetMovementInput(movementInput);
     }
 
     void Die()
@@ -127,12 +77,6 @@ class Player : MonoBehaviour
     {
         Debug.Log("Throttle input: " + value);
         throttleInput = value;
-    }
-
-    void HandleBrake(float value)
-    {
-        Debug.Log("Brake input: " + value);
-        brakeInput = value;
     }
 
     void HandleShoot()
