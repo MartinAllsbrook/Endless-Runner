@@ -67,5 +67,8 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Endless Runner.slnx"
+    "dotnet.defaultSolution": "Endless Runner.slnx",
+    "cSpell.words": [
+        "Poolable"
+    ]
 }

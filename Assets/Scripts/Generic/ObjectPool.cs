@@ -186,6 +186,13 @@ public class ObjectPool<T> where T : MonoBehaviour
     {
         T obj = Object.Instantiate(prefab, parent);
         obj.gameObject.SetActive(false);
+        
+        // Automatically set pool reference if object implements IPoolable
+        if (obj is IPoolable<T> poolable)
+        {
+            poolable.SetPool(this);
+        }
+        
         allObjects.Add(obj);
         availableObjects.Enqueue(obj);
         return obj;

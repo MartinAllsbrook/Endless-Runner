@@ -57,8 +57,6 @@ public class SwivelGun : MonoBehaviour
         Projectile proj = projectilePool.Get(playerPos, rotation);
         if (proj != null)
         {
-            proj.SetPool(projectilePool);
-
             Vector2 velocity = direction * 10f; // Example speed
             velocity += rb.linearVelocity; // Add player's current velocity
             proj.Initialize(velocity, 10f); // Example range
