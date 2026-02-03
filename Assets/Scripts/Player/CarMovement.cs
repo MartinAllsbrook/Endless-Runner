@@ -8,12 +8,14 @@ class CarMovement : MonoBehaviour
     [SerializeField] TextMeshProUGUI speedText;
 
     [Header("Car Movement")]
-    [SerializeField] float acceleration = 10f;
+    [SerializeField] float acceleration = 15f;
     [SerializeField] float maxSpeed = 15f;
     [SerializeField] float reverseMaxSpeed = 8f;
-    [SerializeField] float turnSpeed = 150f;
-    [SerializeField] float brakeForce = 20f;
-    [SerializeField] float drag = 2f;
+    [SerializeField] float turnSpeed = 200f;
+    [SerializeField] float brakeForce = 25f;
+    [SerializeField] float drag = 1f;
+    [SerializeField] float lateralFriction = 5f; // Prevents sliding
+    [SerializeField] float minSpeedForTurn = 0.3f;
 
     // Input vector: x = steering (-1 to 1), y = throttle/reverse (-1 to 1)
     Vector2 movementInput = Vector2.zero;
@@ -50,6 +52,7 @@ class CarMovement : MonoBehaviour
 
         // Calculate forward direction
         Vector2 forward = transform.up;
+        Vector2 right = transform.right;
 
         // Determine if we're moving forward or backward
         float forwardDot = Vector2.Dot(velocity.normalized, forward);
@@ -66,7 +69,9 @@ class CarMovement : MonoBehaviour
             {
                 if (currentSpeed < maxSpeed)
                 {
-                    rb.AddForce(forward * acceleration * throttleInput, ForceMode2D.Force);
+                    // More responsive acceleration at low speeds
+                    float accelerationCurve = Mathf.Lerp(1.5f, 1f, currentSpeed / maxSpeed);
+                    rb.AddForce(forward * acceleration * throttleInput * accelerationCurve, ForceMode2D.Force);
                 }
             }
             else // Reverse
@@ -74,33 +79,53 @@ class CarMovement : MonoBehaviour
                 float reverseInput = -throttleInput;
                 if (currentSpeed < reverseMaxSpeed || movingBackward)
                 {
-                    rb.AddForce(-forward * acceleration * reverseInput * 0.7f, ForceMode2D.Force);
+                    rb.AddForce(-forward * acceleration * reverseInput * 0.6f, ForceMode2D.Force);
                 }
                 else if (movingForward)
                 {
-                    // Apply brake force when trying to reverse while moving forward
+                    // Apply stronger brake force when trying to reverse while moving forward
                     rb.AddForce(-velocity.normalized * brakeForce * reverseInput, ForceMode2D.Force);
                 }
             }
         }
+        else if (currentSpeed > 0.1f)
+        {
+            // Apply gentle braking when no input
+            rb.AddForce(-velocity.normalized * brakeForce * 0.15f, ForceMode2D.Force);
+        }
 
         // Apply steering (only when moving)
-        if (Mathf.Abs(steerInput) > 0.1f && currentSpeed > 0.5f)
+        if (Mathf.Abs(steerInput) > 0.1f && currentSpeed > minSpeedForTurn)
         {
-            float turnAmount = steerInput * turnSpeed * currentSpeed * Time.fixedDeltaTime;
-            // Reduce turn speed at higher velocities for more realistic handling
-            float speedFactor = Mathf.Clamp01(currentSpeed / maxSpeed);
+            // Better steering curve: more responsive at mid speeds
+            float steeringCurve = Mathf.Clamp01(currentSpeed / maxSpeed);
+            steeringCurve = Mathf.Pow(steeringCurve, 0.6f); // Exponential curve for better feel
             
             // Reverse steering direction when moving backward
             float steeringDirection = movingBackward ? -1f : 1f;
-            rb.angularVelocity = -turnAmount * speedFactor * 10f * steeringDirection;
+            
+            // Use torque for smoother, more realistic turning
+            float torque = steerInput * turnSpeed * steeringCurve * steeringDirection;
+            rb.AddTorque(-torque * Time.fixedDeltaTime, ForceMode2D.Force);
+            
+            // Dampen angular velocity to prevent over-rotation
+            rb.angularVelocity *= 0.95f;
         }
         else
         {
-            rb.angularVelocity = 0f;
+            // Gradually reduce angular velocity instead of stopping instantly
+            rb.angularVelocity *= 0.85f;
         }
 
-        // Apply drag
-        rb.linearVelocity = Vector2.Lerp(velocity, Vector2.zero, drag * Time.fixedDeltaTime);
+        // Apply lateral friction (prevent sliding sideways)
+        float lateralSpeed = Vector2.Dot(velocity, right);
+        Vector2 lateralVelocity = right * lateralSpeed;
+        Vector2 frictionForce = -lateralVelocity * lateralFriction;
+        rb.AddForce(frictionForce, ForceMode2D.Force);
+
+        // Apply forward drag (more realistic than lerp)
+        float forwardSpeed = Vector2.Dot(velocity, forward);
+        Vector2 forwardVelocity = forward * forwardSpeed;
+        rb.AddForce(-forwardVelocity * drag * Time.fixedDeltaTime, ForceMode2D.Force);
     }
 }

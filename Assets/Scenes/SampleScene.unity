@@ -1142,6 +1142,10 @@ PrefabInstance:
       propertyPath: speedText
       value: 
       objectReference: {fileID: 1473947266}
+    - target: {fileID: 4262848981007413409, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
+      propertyPath: brakeForce
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 8074523175339371606, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
       propertyPath: healthBar
       value: 
