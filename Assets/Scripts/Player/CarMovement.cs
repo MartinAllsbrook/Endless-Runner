@@ -1,8 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 class CarMovement : MonoBehaviour
 {
+    [Header("UI (ToBeRemoved)")]
+    [SerializeField] TextMeshProUGUI speedText;
+
     [Header("Car Movement")]
     [SerializeField] float acceleration = 10f;
     [SerializeField] float maxSpeed = 15f;
@@ -19,6 +23,13 @@ class CarMovement : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        float speed = rb.linearVelocity.magnitude;
+        float speedKPH = speed * 3.6f; // Convert m/s to km/h
+        speedText.text = $"{speedKPH:0} km/h";
     }
 
     void FixedUpdate()

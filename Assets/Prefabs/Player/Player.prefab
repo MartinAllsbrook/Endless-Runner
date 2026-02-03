@@ -154,7 +154,7 @@ MonoBehaviour:
   acceleration: 10
   maxSpeed: 15
   reverseMaxSpeed: 8
-  turnSpeed: 150
+  turnSpeed: 300
   brakeForce: 20
   drag: 2
 --- !u!114 &1858005793101817943
@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwivelGun
   projectilePrefab: {fileID: 307675850261925518, guid: 8bf91408264d661418479a5c7960aa43, type: 3}
+  rateOfFire: 4
 --- !u!1 &3665510883985003578
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +183,7 @@ GameObject:
   - component: {fileID: 3505322991313308250}
   - component: {fileID: 6756897557527435957}
   - component: {fileID: 8636671987308454994}
+  - component: {fileID: 2957302143575307650}
   m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -307,6 +309,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &2957302143575307650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3665510883985003578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848db44117d25f74fbfeb8a06669c5d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
 --- !u!1 &5518435479961445782
 GameObject:
   m_ObjectHideFlags: 0

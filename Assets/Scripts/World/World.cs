@@ -7,6 +7,8 @@ public class World : MonoBehaviour
 
     [SerializeField] WorldObject worldObjectPrefab;
     [SerializeField] float chunkSize = 20f;
+    [SerializeField] int objectsPerChunk = 50;
+    [SerializeField] float objectSpacing = 2.5f;
     [SerializeField] Chunk chunkPrefab;
     [SerializeField] int poolSize = 20;
 
@@ -92,7 +94,7 @@ public class World : MonoBehaviour
         // Create new chunk if it doesn't exist
         Chunk chunk = Instantiate(chunkPrefab, transform);
         Vector2 position = new Vector2(coord.x * chunkSize, coord.y * chunkSize);        
-        chunk.Initialize(position, chunkSize, 50, 1.5f);
+        chunk.Initialize(position, chunkSize, objectsPerChunk, objectSpacing);
         
         // Store in allChunks dictionary
         allChunks[coord] = chunk;
