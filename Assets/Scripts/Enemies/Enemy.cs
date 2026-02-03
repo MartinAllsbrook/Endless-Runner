@@ -34,7 +34,7 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
         // Despawn if too far from player
         if (Vector2.Distance(currentPosition, targetPosition) > maxDistanceToPlayer)
         {
-            Die();
+            Despawn();
             return;
         }
         
@@ -56,6 +56,12 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
     }
 
     void Die()
+    {
+        Player.Instance.GetComponent<Inventory>().AddScrap(3);
+        Despawn();
+    }
+
+    void Despawn()
     {
         pool.Return(this);
     }

@@ -4,9 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 class CarMovement : MonoBehaviour
 {
-    [Header("UI (ToBeRemoved)")]
-    [SerializeField] TextMeshProUGUI speedText;
-
     [Header("Car Movement")]
     [SerializeField] float acceleration = 15f;
     [SerializeField] float maxSpeed = 15f;
@@ -25,13 +22,6 @@ class CarMovement : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    void Update()
-    {
-        float speed = rb.linearVelocity.magnitude;
-        float speedKPH = speed * 3.6f; // Convert m/s to km/h
-        speedText.text = $"{speedKPH:0} km/h";
     }
 
     void FixedUpdate()
@@ -127,5 +117,15 @@ class CarMovement : MonoBehaviour
         float forwardSpeed = Vector2.Dot(velocity, forward);
         Vector2 forwardVelocity = forward * forwardSpeed;
         rb.AddForce(-forwardVelocity * drag * Time.fixedDeltaTime, ForceMode2D.Force);
+    }
+
+    float GetCurrentSpeed()
+    {
+        return rb.linearVelocity.magnitude;
+    }
+
+    public float GetCurrentSpeedKPH()
+    {
+        return GetCurrentSpeed() * 3.6f; // Convert m/s to km/h
     }
 }
