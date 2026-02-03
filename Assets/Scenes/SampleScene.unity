@@ -1073,8 +1073,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::World
   worldObjectPrefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
   chunkSize: 50
-  objectsPerChunk: 75
-  objectSpacing: 3.5
+  objectsPerChunk: 50
+  objectSpacing: 5
   chunkPrefab: {fileID: 3220366958713045854, guid: d347e7fb823730f4aab4231c31f74296, type: 3}
   poolSize: 675
 --- !u!1001 &5481750280693507573

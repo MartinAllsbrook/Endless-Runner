@@ -76,6 +76,21 @@ class Player : MonoBehaviour
         // Implement respawn or game over logic here
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("World Object"))
+        {
+            Health objectHealth = collision.gameObject.GetComponent<Health>();
+            float impactStrength = collision.relativeVelocity.magnitude;
+
+            if (objectHealth != null)
+            {
+                objectHealth.DecreaseHealth(impactStrength * 8); // Damage enemy on collision
+                health.DecreaseHealth(impactStrength * 0.5f); // Damage player on collision
+            }
+        }
+    }
+
     #region Input Handlers
     void HandleSteer(float value)
     {
