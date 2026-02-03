@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class World : MonoBehaviour
 {
     public static World Instance;
+    public static event Action OnWorldLoaded = delegate { };
 
     [SerializeField] WorldObject worldObjectPrefab;
     [SerializeField] float chunkSize = 20f;
@@ -31,6 +33,8 @@ public class World : MonoBehaviour
 
         // Initialize pool using ObjectPool<T> API
         worldObjectPool = new ObjectPool<WorldObject>(worldObjectPrefab, poolSize, this.transform);
+    
+        OnWorldLoaded.Invoke();
     }
 
     void Update()

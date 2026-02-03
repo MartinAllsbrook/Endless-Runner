@@ -311,18 +311,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tunnel
       objectReference: {fileID: 0}
-    - target: {fileID: 5719491092210243890, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5719491092210243890, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5719491092210243890, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

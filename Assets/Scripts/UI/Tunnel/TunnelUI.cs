@@ -11,10 +11,9 @@ class TunnelUI : MonoBehaviour
         closeButton.onClick.AddListener(CloseTunnelUI);
     }
 
-    void CloseTunnelUI()
+    async void CloseTunnelUI()
     {
         Debug.Log("Closing Tunnel UI");
-        SceneManager.UnloadSceneAsync("TunnelUI");
-        SceneManager.LoadSceneAsync("World", LoadSceneMode.Additive);
+        await GameManager.Instance.ExitTunnel();
     }
 }

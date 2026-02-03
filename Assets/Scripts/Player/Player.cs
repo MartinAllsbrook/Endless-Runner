@@ -92,20 +92,21 @@ class Player : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    async void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Tunnel"))
         {
             Tunnel tunnel = other.GetComponent<Tunnel>();
             if (tunnel != null)
             {
-                tunnel.EnterTunnel();
+                await tunnel.EnterTunnel();
             }
         }
     }
 
     public void SetTransform(Vector3 position, Quaternion rotation)
     {
+        Debug.Log("Setting Player Transform");
         transform.position = position;
         transform.rotation = rotation;
     
