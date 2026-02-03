@@ -1129,22 +1129,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3505322991313308250, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
-      propertyPath: orthographic size
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 4262848981007413409, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
-      propertyPath: speedText
-      value: 
-      objectReference: {fileID: 1473947266}
-    - target: {fileID: 4262848981007413409, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
-      propertyPath: brakeForce
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 8074523175339371606, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 544430262}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -5,7 +5,6 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(CarMovement))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(SwivelGun))]
 [RequireComponent(typeof(Inventory))]
 class Player : MonoBehaviour
 {
@@ -29,7 +28,7 @@ class Player : MonoBehaviour
             Destroy(gameObject);
 
         // Get components
-        swivelGun = GetComponent<SwivelGun>();
+        swivelGun = GetComponentInChildren<SwivelGun>();
         health = GetComponent<Health>();
         carMovement = GetComponent<CarMovement>();
         rb = GetComponent<Rigidbody2D>();

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
-    float range;
+    float lifetime;
     Vector3 startPosition;
     ObjectPool<Projectile> pool;
 
@@ -19,19 +19,21 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
         pool = _pool;
     }
 
-    public void Initialize(Vector2 velocity, float _range)
+    public void Initialize(Vector2 velocity, float _lifetime)
     {
         rb.linearVelocity = velocity;
-        range = _range;
+        lifetime = _lifetime;
 
         startPosition = transform.position;
     }
 
     void Update()
     {
-        if (Vector3.Distance(startPosition, transform.position) >= range)
+        lifetime -= Time.deltaTime;
+        if (lifetime <= 0f)
         {
             ReturnToPool();
+            return;
         }
     }
 
