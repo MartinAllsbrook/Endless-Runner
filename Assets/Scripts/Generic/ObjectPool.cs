@@ -111,6 +111,21 @@ public class ObjectPool<T> where T : MonoBehaviour
     }
 
     /// <summary>
+    /// Gets an object from the pool, parents it to the specified transform, and sets its local position
+    /// </summary>
+    public T Get(Vector3 localPosition, Transform parentTransform)
+    {
+        T obj = Get();
+        if (obj != null)
+        {
+            obj.transform.SetParent(parentTransform);
+            obj.transform.localPosition = localPosition;
+            obj.transform.localRotation = Quaternion.identity;
+        }
+        return obj;
+    }
+
+    /// <summary>
     /// Returns an object to the pool
     /// </summary>
     /// <param name="obj">Object to return</param>
@@ -128,8 +143,9 @@ public class ObjectPool<T> where T : MonoBehaviour
             return;
         }
 
+        // Set parent first with worldPositionStays=false to move object out of potentially deactivating parent hierarchy
+        obj.transform.SetParent(parent, false);
         obj.gameObject.SetActive(false);
-        obj.transform.SetParent(parent);
         availableObjects.Enqueue(obj);
     }
 

@@ -574,7 +574,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2022846390}
   - {fileID: 619394802}
   - {fileID: 1960677797}
   - {fileID: 178109562}
@@ -689,7 +688,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1506816139}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2022846391
 MonoBehaviour:
@@ -703,8 +702,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb7ecb15aaf71d4885bda6c5a879480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World
-  genericEnvironmentPrefab: {fileID: 8268799292672452236, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
-  genericEnemyPrefab: {fileID: 8745744147693600756, guid: e73a03257ea39e84cb061ec18777ce43, type: 3}
+  worldObjectPrefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
+  chunkSize: 20
+  chunkPrefab: {fileID: 3220366958713045854, guid: d347e7fb823730f4aab4231c31f74296, type: 3}
+  poolSize: 20
 --- !u!1001 &5481750280693507573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -717,10 +718,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1858005793101817943, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 307675850261925518, guid: 8bf91408264d661418479a5c7960aa43, type: 3}
     - target: {fileID: 3194791642850458528, guid: 98f153c34330a4344aa6cf7f46e257c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -777,3 +774,4 @@ SceneRoots:
   - {fileID: 5481750280693507573}
   - {fileID: 1506816139}
   - {fileID: 351914362}
+  - {fileID: 2022846390}
