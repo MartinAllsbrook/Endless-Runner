@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   speed: 2
+  maxDistanceToPlayer: 150
 --- !u!114 &4284679065651901076
 MonoBehaviour:
   m_ObjectHideFlags: 0

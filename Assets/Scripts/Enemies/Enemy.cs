@@ -2,12 +2,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Health))]
-class Enemy : MonoBehaviour
+class Enemy : MonoBehaviour, IPoolable<Enemy>
 {
     [SerializeField] float speed = 2f;
+    [SerializeField] float maxDistanceToPlayer = 200f;
 
     Health health;
 
+    ObjectPool<Enemy> pool;
 
     void Awake()
     {
@@ -28,6 +30,15 @@ class Enemy : MonoBehaviour
     {
         Vector2 targetPosition = Player.Instance.transform.position;
         Vector2 currentPosition = transform.position;
+        
+        // Despawn if too far from player
+        if (Vector2.Distance(currentPosition, targetPosition) > maxDistanceToPlayer)
+        {
+            Die();
+            return;
+        }
+        
+        // Move towards player
         Vector2 moveDirection = (targetPosition - currentPosition).normalized;
         transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
 
@@ -36,11 +47,17 @@ class Enemy : MonoBehaviour
             float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
         }
+
+    }
+
+    public void SetPool(ObjectPool<Enemy> _pool)
+    {
+        pool = _pool;
     }
 
     void Die()
     {
-        Destroy(gameObject);
+        pool.Return(this);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

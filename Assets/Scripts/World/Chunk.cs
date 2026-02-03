@@ -24,6 +24,8 @@ public class Chunk : MonoBehaviour
         points = GenerateBlueNoisePoints(Vector2.zero, chunkSize, pointCount, minDistance);
         objects = new WorldObject[points.Length];
     
+        SpawnEnemies();
+
         PlaceObjects();
     }
 
@@ -37,6 +39,15 @@ public class Chunk : MonoBehaviour
     public void Cleanup()
     {
         DestroyObjects();
+    }
+
+    void SpawnEnemies()
+    {
+        Vector2[] points = GenerateBlueNoisePoints(chunkPosition, chunkSize, 5, 3f);
+        foreach (var point in points)
+        {
+            EnemyManager.Instance.SpawnEnemyAt(point);
+        }
     }
 
     void PlaceObjects()
@@ -59,7 +70,7 @@ public class Chunk : MonoBehaviour
     }
 
     // Simple blue noise (Poisson Disk Sampling) implementation
-    private Vector2[] GenerateBlueNoisePoints(Vector2 origin, float size, int count, float minDist)
+    Vector2[] GenerateBlueNoisePoints(Vector2 origin, float size, int count, float minDist)
     {
         List<Vector2> points = new List<Vector2>();
         int maxAttempts = 30;
@@ -97,4 +108,5 @@ public class Chunk : MonoBehaviour
         }
         return points.ToArray();
     }
+
 }

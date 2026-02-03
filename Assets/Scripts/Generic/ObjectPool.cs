@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 /// <summary>
 /// Generic object pool for Unity GameObjects to reduce instantiation overhead
 /// </summary>
 public class ObjectPool<T> where T : MonoBehaviour
 {
-    private readonly T prefab;
-    private readonly Queue<T> availableObjects;
-    private readonly List<T> allObjects;
-    private readonly Transform parent;
-    private readonly int initialSize;
-    private readonly int maxSize;
-    private readonly bool autoExpand;
+    readonly T prefab;
+    readonly Queue<T> availableObjects;
+    readonly List<T> allObjects;
+    readonly Transform parent;
+    readonly int initialSize;
+    readonly int maxSize;
+    readonly bool autoExpand;
 
     /// <summary>
     /// Creates a new object pool
@@ -160,7 +161,7 @@ public class ObjectPool<T> where T : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator ReturnAfterDelayCoroutine(T obj, float delay)
+    System.Collections.IEnumerator ReturnAfterDelayCoroutine(T obj, float delay)
     {
         yield return new WaitForSeconds(delay);
         Return(obj);
@@ -198,7 +199,7 @@ public class ObjectPool<T> where T : MonoBehaviour
         }
     }
 
-    private T CreateNewObject()
+    T CreateNewObject()
     {
         T obj = Object.Instantiate(prefab, parent);
         obj.gameObject.SetActive(false);

@@ -3,5 +3,5 @@
 /// </summary>
 public interface IPoolable<T> where T : UnityEngine.MonoBehaviour
 {
-    void SetPool(ObjectPool<T> pool);
+    public void SetPool(ObjectPool<T> pool);
 }
