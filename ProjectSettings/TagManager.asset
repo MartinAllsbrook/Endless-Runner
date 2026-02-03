@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - World Object
+  - Tunnel
   layers:
   - Default
   - TransparentFX

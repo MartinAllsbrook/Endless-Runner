@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(CarMovement))]
@@ -89,6 +90,27 @@ class Player : MonoBehaviour
                 health.DecreaseHealth(impactStrength * 0.5f); // Damage player on collision
             }
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Tunnel"))
+        {
+            Tunnel tunnel = other.GetComponent<Tunnel>();
+            if (tunnel != null)
+            {
+                tunnel.EnterTunnel();
+            }
+        }
+    }
+
+    public void SetTransform(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
+    
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
     }
 
     #region Input Handlers
