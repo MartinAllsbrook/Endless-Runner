@@ -109,6 +109,17 @@ class Player : MonoBehaviour
                 await tunnel.EnterTunnel();
             }
         }
+        else if (other.CompareTag("World Object"))
+        {
+            Health objectHealth = other.GetComponent<Health>();
+            if (objectHealth != null)
+            {
+                // Calculate damage based on player's current velocity
+                float impactStrength = rb.linearVelocity.magnitude;
+                objectHealth.DecreaseHealth(impactStrength * 8); // Damage object
+                health.DecreaseHealth(impactStrength * 0.1f); // Slight damage to player (reduced from 0.5)
+            }
+        }
     }
 
     public void SetTransform(Vector3 position, Quaternion rotation)

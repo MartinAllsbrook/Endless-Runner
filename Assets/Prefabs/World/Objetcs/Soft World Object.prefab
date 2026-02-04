@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3773666099979727427}
   - component: {fileID: 173214665657551630}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Soft World Object
   m_TagString: World Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

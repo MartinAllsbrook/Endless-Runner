@@ -6,13 +6,20 @@ public class World : MonoBehaviour
 {
     public static World Instance;
     public static event Action OnWorldLoaded = delegate { };
-
-    [SerializeField] WorldObject worldObjectPrefab;
+    
+    [Header("Chunk")]
+    [SerializeField] Chunk chunkPrefab;
     [SerializeField] float chunkSize = 20f;
+    
+    [Header("Objects")]
+    [SerializeField] WorldObject worldObjectPrefab;
     [SerializeField] int objectsPerChunk = 50;
     [SerializeField] float objectSpacing = 2.5f;
-    [SerializeField] Chunk chunkPrefab;
     [SerializeField] int poolSize = 20;
+    
+    [Header("Tunnel")]
+    [SerializeField] Transform tunnelPrefab;
+    [SerializeField] float tunnelDistance = 500f;
 
     ObjectPool<WorldObject> worldObjectPool;
     Dictionary<Vector2Int, Chunk> activeChunks = new Dictionary<Vector2Int, Chunk>();
@@ -33,7 +40,10 @@ public class World : MonoBehaviour
 
         // Initialize pool using ObjectPool<T> API
         worldObjectPool = new ObjectPool<WorldObject>(worldObjectPrefab, poolSize, this.transform);
-    
+
+        // Place tunnel
+        PlaceTunnel();
+
         OnWorldLoaded.Invoke();
     }
 
@@ -78,6 +88,19 @@ public class World : MonoBehaviour
         {
             activeChunks.Remove(coord);
         }
+    }
+
+    void PlaceTunnel()
+    {
+        // Generate a random angle in radians
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+        // Calculate position on circle
+        Vector2 position = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * tunnelDistance;
+        // Generate a random rotation around Z axis
+        float randomZRotation = UnityEngine.Random.Range(0f, 360f);
+        Quaternion rotation = Quaternion.Euler(0f, 0f, randomZRotation);
+        // Instantiate tunnelPrefab at position with random rotation
+        Instantiate(tunnelPrefab, new Vector3(position.x, position.y, 0f), rotation, transform);
     }
 
     Vector2Int GetChunkCoordFromPosition(Vector2 position)

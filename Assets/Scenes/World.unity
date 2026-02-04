@@ -293,69 +293,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb7ecb15aaf71d4885bda6c5a879480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World
-  worldObjectPrefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
+  chunkPrefab: {fileID: 3220366958713045854, guid: d347e7fb823730f4aab4231c31f74296, type: 3}
   chunkSize: 50
+  worldObjectPrefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
   objectsPerChunk: 50
   objectSpacing: 5
-  chunkPrefab: {fileID: 3220366958713045854, guid: d347e7fb823730f4aab4231c31f74296, type: 3}
   poolSize: 675
---- !u!1001 &4475575346388975641
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2198694356204098280, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_Name
-      value: Tunnel
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 21.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 180
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
+  tunnelPrefab: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
+  tunnelDistance: 500
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -363,4 +308,3 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 1763481618}
   - {fileID: 2022846390}
-  - {fileID: 4475575346388975641}

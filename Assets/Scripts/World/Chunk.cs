@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class Chunk : MonoBehaviour
 {
+    [SerializeField] Transform backgroundTransform;
+
     Vector2[] points;
     Vector2 chunkPosition;
     float chunkSize;
@@ -19,6 +21,8 @@ public class Chunk : MonoBehaviour
         chunkSize = _chunkSize;
 
         transform.position = new Vector3(chunkPosition.x, chunkPosition.y, 0f);
+        backgroundTransform.localScale = new Vector3(chunkSize, chunkSize, 1f);
+        backgroundTransform.localPosition = new Vector3(chunkSize / 2f, chunkSize / 2f, 1f);    
         
         // Generate points in local space (0 to chunkSize) since chunk transform is already positioned
         points = GenerateBlueNoisePoints(Vector2.zero, chunkSize, pointCount, minDistance);
