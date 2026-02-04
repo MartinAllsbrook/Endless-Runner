@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public static event Action OnTunnelExitedAndWorldLoaded = delegate { };
     public static event Action OnWorldLoaded = delegate { };
 
+    [SerializeField] Camera backupCamera;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,12 +25,55 @@ public class GameManager : MonoBehaviour
 
     private async void Start()
     {
-        // Optionally load the world at start
-        await LoadWorld();
+        await SceneManager.LoadSceneAsync("MainMenuUI", LoadSceneMode.Additive);
+        Time.timeScale = 0f;        
     }
 
+    public async Task StartGame()
+    {
+        await SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive);
+        backupCamera.gameObject.SetActive(false);
+        await LoadWorld();
+        await SceneManager.UnloadSceneAsync("MainMenuUI");
+        Time.timeScale = 1f;
+    }
+
+    public async Task EndGame()
+    {
+        Time.timeScale = 0f;
+        await SceneManager.LoadSceneAsync("GameOverUI", LoadSceneMode.Additive);
+        
+        // Only unload World if it's currently loaded
+        Scene worldScene = SceneManager.GetSceneByName("World");
+        if (worldScene.isLoaded)
+        {
+            await SceneManager.UnloadSceneAsync("World");
+        }
+    }
+
+    public async Task RestartGame()
+    {
+        await SceneManager.UnloadSceneAsync("GameOverUI");
+        
+        // Unload TunnelUI if player died in tunnel
+        Scene tunnelScene = SceneManager.GetSceneByName("TunnelUI");
+        if (tunnelScene.isLoaded)
+        {
+            await SceneManager.UnloadSceneAsync("TunnelUI");
+        }
+        
+        backupCamera.gameObject.SetActive(true);
+        await SceneManager.UnloadSceneAsync("Player");
+        await SceneManager.LoadSceneAsync("Player", LoadSceneMode.Additive);
+        backupCamera.gameObject.SetActive(false);
+        await LoadWorld();
+        Time.timeScale = 1f;
+    }
+
+    #region Tunnel
     public async Task EnterTunnel()
     {
+        Time.timeScale = 0f;
         await SceneManager.LoadSceneAsync("TunnelUI", LoadSceneMode.Additive);
         await SceneManager.UnloadSceneAsync("World");
         OnTunnelEnteredAndLoaded.Invoke();
@@ -39,8 +84,11 @@ public class GameManager : MonoBehaviour
         await SceneManager.UnloadSceneAsync("TunnelUI");
         await LoadWorld();
         OnTunnelExitedAndWorldLoaded.Invoke();
+        Time.timeScale = 1f;
     }
+    #endregion
 
+    #region World
     async Task LoadWorld()
     {
         await SceneManager.LoadSceneAsync("World", LoadSceneMode.Additive);
@@ -61,4 +109,5 @@ public class GameManager : MonoBehaviour
         Debug.Log("World scene loaded successfully.");
         OnWorldLoaded.Invoke();
     }
+    #endregion
 }

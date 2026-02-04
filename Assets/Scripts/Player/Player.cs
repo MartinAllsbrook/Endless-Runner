@@ -20,6 +20,8 @@ class Player : MonoBehaviour
     CarMovement carMovement;
     Rigidbody2D rb;
 
+    bool dead = false;
+
     void Awake()
     {
         // Singleton
@@ -71,10 +73,15 @@ class Player : MonoBehaviour
         carMovement.SetMovementInput(movementInput);
     }
 
-    void Die()
+    async void Die()
     {
+        health.OnDeath -= Die;
+        
+        if (dead) return;
+        dead = true;
+
         Debug.Log("Player has died!");
-        // Implement respawn or game over logic here
+        await GameManager.Instance.EndGame();
     }
 
     void OnCollisionEnter2D(Collision2D collision)

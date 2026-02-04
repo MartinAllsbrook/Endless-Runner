@@ -12,6 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/TunnelUI.unity
     guid: a481df7089efb7e46adaaca2e689fc69
   - enabled: 1
+    path: Assets/Scenes/GameOverUI.unity
+    guid: 4c981c18cc4285d4a81ebe1619eedb0a
+  - enabled: 1
+    path: Assets/Scenes/Player.unity
+    guid: 99acc97afb4595e48869f194271e3460
+  - enabled: 1
+    path: Assets/Scenes/MainMenuUI.unity
+    guid: d3cad66d8a7034e45af455f921ed3421
+  - enabled: 1
     path: Assets/Scenes/World.unity
     guid: 6ebd81be75e7a4b409e5c3ba23af6d38
   m_configObjects:
