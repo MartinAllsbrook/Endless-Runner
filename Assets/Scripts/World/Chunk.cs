@@ -5,32 +5,33 @@ public class Chunk : MonoBehaviour
 {
     [SerializeField] Transform backgroundTransform;
 
-    Vector2[] points;
+    Dictionary<ScatterTag, Vector2[]> scatterPoints = new Dictionary<ScatterTag, Vector2[]>();
     Vector2 chunkPosition;
     float chunkSize;
-    WorldObject[] objects;
+    WorldObject[] scatteredObjects;
 
     bool initialized = false;
-    public void Initialize(Vector2 _chunkPosition, float _chunkSize, int pointCount, float minDistance)
+    public void Initialize(Vector2 _chunkPosition, float _chunkSize)
     {
+        // Prevent double initialization
         if (initialized) return;
-
         initialized = true;
 
+        // Store chunk position and size
         chunkPosition = _chunkPosition;
         chunkSize = _chunkSize;
 
+        // Position and scale background
         transform.position = new Vector3(chunkPosition.x, chunkPosition.y, 0f);
         backgroundTransform.localScale = new Vector3(chunkSize, chunkSize, 1f);
         backgroundTransform.localPosition = new Vector3(chunkSize / 2f, chunkSize / 2f, 1f);    
-        
-        // Generate points in local space (0 to chunkSize) since chunk transform is already positioned
-        points = GenerateBlueNoisePoints(Vector2.zero, chunkSize, pointCount, minDistance);
-        objects = new WorldObject[points.Length];
-    
+
+        // Generate scatter points for this chunk
+        GeneratePoints(ScatterManager.Instance.scatterSettings);
+        PlaceObjects();
+
         SpawnEnemies();
 
-        PlaceObjects();
     }
 
     void OnEnable()
@@ -45,9 +46,25 @@ public class Chunk : MonoBehaviour
         DestroyObjects();
     }
 
+    void GeneratePoints(ScatterSettings[] scatterSettings)
+    {
+        int numPoints = 0;
+
+        foreach (var setting in scatterSettings)
+        {
+            // Generate points for this scatter type
+            Vector2[] points = BlueNoise.GenerateWithCount(chunkPosition, chunkPosition + Vector2.one * chunkSize, setting.targetDensity);
+            scatterPoints[setting.tag] = points;
+     
+            numPoints += points.Length;
+        }
+
+        scatteredObjects = new WorldObject[numPoints];
+    }
+
     void SpawnEnemies()
     {
-        Vector2[] points = GenerateBlueNoisePoints(chunkPosition, chunkSize, 5, 3f);
+        Vector2[] points = BlueNoise.GenerateWithCount(chunkPosition, chunkPosition + Vector2.one * chunkSize, 5);
         foreach (var point in points)
         {
             EnemyManager.Instance.SpawnEnemyAt(point);
@@ -56,61 +73,28 @@ public class Chunk : MonoBehaviour
 
     void PlaceObjects()
     {
-        for (int i = 0; i < points.Length; i++)
+        int index = 0;
+        foreach (var kvp in scatterPoints)
         {
-            objects[i] = World.Instance.PlaceObjectAt(points[i], transform);
+            ScatterTag tag = kvp.Key;
+            Vector2[] points = kvp.Value;
+
+            foreach (var point in points)
+            {
+                scatteredObjects[index] = ScatterManager.Instance.SpawnScatter(tag, point);
+                index++;
+            }
         }
     }
 
     void DestroyObjects()
     {
-        for (int i = 0; i < objects.Length; i++)
+        for (int i = 0; i < scatteredObjects.Length; i++)
         {
-            if (objects[i] != null)
+            if (scatteredObjects[i] != null)
             {
-                objects[i].ReturnToPool();
+                scatteredObjects[i].ReturnToPool();
             }
         }
     }
-
-    // Simple blue noise (Poisson Disk Sampling) implementation
-    Vector2[] GenerateBlueNoisePoints(Vector2 origin, float size, int count, float minDist)
-    {
-        List<Vector2> points = new List<Vector2>();
-        int maxAttempts = 30;
-        Rect bounds = new Rect(origin, new Vector2(size, size));
-        System.Random rand = new System.Random();
-
-        // Start with a random point
-        Vector2 firstPoint = new Vector2(
-            (float)(origin.x + rand.NextDouble() * size),
-            (float)(origin.y + rand.NextDouble() * size)
-        );
-        points.Add(firstPoint);
-
-        int attempts = 0;
-        while (points.Count < count && attempts < count * maxAttempts)
-        {
-            Vector2 candidate = new Vector2(
-                (float)(origin.x + rand.NextDouble() * size),
-                (float)(origin.y + rand.NextDouble() * size)
-            );
-            bool valid = true;
-            foreach (var p in points)
-            {
-                if (Vector2.Distance(candidate, p) < minDist)
-                {
-                    valid = false;
-                    break;
-                }
-            }
-            if (valid)
-            {
-                points.Add(candidate);
-            }
-            attempts++;
-        }
-        return points.ToArray();
-    }
-
 }

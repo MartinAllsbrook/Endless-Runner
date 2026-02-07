@@ -6,20 +6,17 @@ public class World : MonoBehaviour
 {
     public static World Instance;
     public static event Action OnWorldLoaded = delegate { };
-    
+
     [Header("Chunk")]
     [SerializeField] Chunk chunkPrefab;
     [SerializeField] float chunkSize = 20f;
     
-    [Header("Objects")]
-    [SerializeField] WorldObject worldObjectPrefab;
-    [SerializeField] int objectsPerChunk = 50;
-    [SerializeField] float objectSpacing = 2.5f;
-    [SerializeField] int poolSize = 20;
-    
     [Header("Tunnel")]
     [SerializeField] Transform tunnelPrefab;
     [SerializeField] float tunnelDistance = 500f;
+
+    [Header("Seed")]
+    [SerializeField] int seed = 0;
 
     ObjectPool<WorldObject> worldObjectPool;
     Dictionary<Vector2Int, Chunk> activeChunks = new Dictionary<Vector2Int, Chunk>();
@@ -32,14 +29,14 @@ public class World : MonoBehaviour
 
     void Awake()
     {
+        if (seed == 0)
+            seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+
         // Singleton
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
-
-        // Initialize pool using ObjectPool<T> API
-        worldObjectPool = new ObjectPool<WorldObject>(worldObjectPrefab, poolSize, this.transform);
 
         // Place tunnel
         PlaceTunnel();
@@ -92,14 +89,14 @@ public class World : MonoBehaviour
 
     void PlaceTunnel()
     {
-        // Generate a random angle in radians
-        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
-        // Calculate position on circle
+        System.Random random = new System.Random(seed);
+
+        float angle = (float)(random.NextDouble() * Mathf.PI * 2f);
+        float randomZRotation = (float)(random.NextDouble() * 360f);
+
         Vector2 position = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * tunnelDistance;
-        // Generate a random rotation around Z axis
-        float randomZRotation = UnityEngine.Random.Range(0f, 360f);
         Quaternion rotation = Quaternion.Euler(0f, 0f, randomZRotation);
-        // Instantiate tunnelPrefab at position with random rotation
+
         Instantiate(tunnelPrefab, new Vector3(position.x, position.y, 0f), rotation, transform);
     }
 
@@ -121,7 +118,7 @@ public class World : MonoBehaviour
         // Create new chunk if it doesn't exist
         Chunk chunk = Instantiate(chunkPrefab, transform);
         Vector2 position = new Vector2(coord.x * chunkSize, coord.y * chunkSize);        
-        chunk.Initialize(position, chunkSize, objectsPerChunk, objectSpacing);
+        chunk.Initialize(position, chunkSize); // TODO: Initialize with proper parameters
         
         // Store in allChunks dictionary
         allChunks[coord] = chunk;

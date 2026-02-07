@@ -259,6 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2022846390}
   - component: {fileID: 2022846391}
+  - component: {fileID: 2022846392}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -295,12 +296,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::World
   chunkPrefab: {fileID: 3220366958713045854, guid: d347e7fb823730f4aab4231c31f74296, type: 3}
   chunkSize: 50
-  worldObjectPrefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
-  objectsPerChunk: 50
-  objectSpacing: 5
-  poolSize: 675
   tunnelPrefab: {fileID: 8859419321185206177, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
   tunnelDistance: 500
+  seed: 1009
+--- !u!114 &2022846392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2022846389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef40bb129169adc489e698c33abbf2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScatterManager
+  scatterSettings:
+  - tag: 100
+    prefab: {fileID: 6035507566771580505, guid: f3d29122a90c7fe4aa5c8706a2fd8212, type: 3}
+    targetDensity: 3
+  - tag: 200
+    prefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
+    targetDensity: 10
+  - tag: 300
+    prefab: {fileID: 6035507566771580505, guid: 9638b0332deb91e4aa97ee4eebd30910, type: 3}
+    targetDensity: 150
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
