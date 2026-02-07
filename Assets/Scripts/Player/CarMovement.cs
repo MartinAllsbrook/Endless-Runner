@@ -11,10 +11,13 @@ class CarMovement : MonoBehaviour
     [SerializeField] float speedSteeringFactor = 16f;
     [SerializeField] float rollingResistance = 2000f;
     [SerializeField] float maxSpeedKPH = 100f;
+    [SerializeField] float maxFuel = 120f;
 
     float maxSpeed => maxSpeedKPH / 3.6f; // Convert km/h to m/s
     float accelerationInput = 0f;
     float steerInput = 0f;
+
+    float fuel = 0f;
 
     float forwardSpeed = 0f;
     float rotationAngle = 0f;
@@ -24,6 +27,8 @@ class CarMovement : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    
+        Refuel();
     }
 
     void FixedUpdate()
@@ -34,10 +39,23 @@ class CarMovement : MonoBehaviour
         ApplyRollingResistance();
         ApplySteering();
         KillLateralVelocity();
+        BurnFuel();
+    }
+
+    void BurnFuel()
+    {
+        if (accelerationInput != 0f)
+        {
+            fuel -= Time.fixedDeltaTime; // Adjust burn rate
+            fuel = Mathf.Max(fuel, 0f);
+        }
     }
 
     void ApplyEngineForce()
     {
+        if (fuel <= 0f)
+            return;
+
         if (forwardSpeed > maxSpeed && accelerationInput > 0f)
             return;
 
@@ -104,6 +122,16 @@ class CarMovement : MonoBehaviour
     {
         steerInput = input.x;
         accelerationInput = input.y;
+    }
+
+    public void Refuel()
+    {
+        fuel = maxFuel;
+    }
+
+    public float GetFuelPercent()
+    {
+        return fuel / maxFuel;
     }
 
     float GetCurrentSpeed()

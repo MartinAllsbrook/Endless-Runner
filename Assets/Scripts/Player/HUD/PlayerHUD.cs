@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PlayerHUD : MonoBehaviour
 {
-    [SerializeField] HealthBar healthBar;
+    [SerializeField] FillBar healthBar;
+    [SerializeField] FillBar fuelBar;
     [SerializeField] TextMeshProUGUI scrapCount;
     [SerializeField] TextMeshProUGUI speedText;
 
@@ -34,6 +35,10 @@ public class PlayerHUD : MonoBehaviour
 
     void Update()
     {
+        // Update fuel bar
+        float fuelPercent = carMovement.GetFuelPercent();
+        fuelBar.SetFill(fuelPercent);
+
         // Update speed display
         float speed = carMovement.GetCurrentSpeedKPH();
         speedText.text = $"{speed:0} km/h";

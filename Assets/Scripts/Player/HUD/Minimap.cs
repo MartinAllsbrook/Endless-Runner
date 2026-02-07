@@ -6,7 +6,7 @@ class Minimap : MonoBehaviour
     [SerializeField] float mapScale = 0.1f;
     [SerializeField] RectTransform tunnelIndicator;
 
-    Tunnel tunnel;
+    TunnelPOI tunnel;
 
     float size;
     float mapRadius;
@@ -31,7 +31,7 @@ class Minimap : MonoBehaviour
     void HandleWorldLoaded()
     {
         Debug.Log("Minimap: World Loaded - Finding Tunnel");
-        tunnel = FindFirstObjectByType<Tunnel>();
+        tunnel = FindFirstObjectByType<TunnelPOI>();
     }
 
     void Update()

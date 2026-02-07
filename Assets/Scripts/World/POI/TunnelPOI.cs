@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Tunnel : MonoBehaviour
+class TunnelPOI : PointOfInterest
 {
     [SerializeField] Transform tunnelExitPoint;
 
-    public async Task EnterTunnel()
+    async void EnterTunnel()
     {
         await GameManager.Instance.EnterTunnel();
 
@@ -16,6 +16,12 @@ public class Tunnel : MonoBehaviour
         {
             Player.Instance.SetTransform(Vector3.zero, Quaternion.identity);
             Player.Instance.GetComponent<Health>().ResetHealth();
+            Player.Instance.GetComponent<CarMovement>().Refuel();
         }
+    }
+
+    protected override void OnPlayerEnter()
+    {
+        EnterTunnel();
     }
 }

@@ -89,18 +89,6 @@ class Player : MonoBehaviour
         await GameManager.Instance.EndGame();
     }
 
-    async void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Tunnel"))
-        {
-            Tunnel tunnel = other.GetComponent<Tunnel>();
-            if (tunnel != null)
-            {
-                await tunnel.EnterTunnel();
-            }
-        }
-    }
-
     public void SetTransform(Vector3 position, Quaternion rotation)
     {
         Debug.Log("Setting Player Transform");
