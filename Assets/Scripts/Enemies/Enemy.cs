@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -6,14 +7,22 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
 {
     [SerializeField] float speed = 2f;
     [SerializeField] float maxDistanceToPlayer = 200f;
-
+    [SerializeField] float attackSpeed = 2f;
+    [SerializeField] float damage = 20f;
+    [SerializeField] Color attackColor = Color.red;
+    Color originalColor;
+    SpriteRenderer spriteRenderer;
     Health health;
+    float attackCooldown;
+    bool playerInRange = false;
 
     ObjectPool<Enemy> pool;
 
     void Awake()
     {
         health = GetComponent<Health>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
     }
 
     void OnEnable()
@@ -27,6 +36,42 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
     }
 
     void Update()
+    {
+        TryAttack();
+        Move();
+    }
+
+    void TryAttack()
+    {
+        if (playerInRange)
+        {
+            attackCooldown -= Time.deltaTime;
+            if (attackCooldown <= 0f)
+            {
+                Attack();
+            }
+        }
+    }
+
+    void Attack()
+    {
+        StartCoroutine(PlayAttackEffect());
+        var playerHealth = Player.Instance.GetComponent<Health>();
+        if (playerHealth != null)
+        {
+            playerHealth.DecreaseHealth(damage);
+        }
+        attackCooldown = attackSpeed;
+    }
+
+    IEnumerator PlayAttackEffect()
+    {
+        spriteRenderer.color = attackColor;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = originalColor;
+    }
+
+    void Move()
     {
         Vector2 targetPosition = Player.Instance.transform.position;
         Vector2 currentPosition = transform.position;
@@ -47,7 +92,6 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
             float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
         }
-
     }
 
     public void SetPool(ObjectPool<Enemy> _pool)
@@ -66,15 +110,22 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
         pool.Return(this);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            var playerHealth = collision.gameObject.GetComponent<Health>();
-            if (playerHealth != null)
-            {
-                playerHealth.DecreaseHealth(20f);
-            }
+            playerInRange = true;
+            attackCooldown = attackSpeed; // Reset cooldown when player leaves range
+        }
+    }
+
+    
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+            attackCooldown = attackSpeed; // Reset cooldown when player leaves range
         }
     }
 }
