@@ -19,6 +19,7 @@ class Player : MonoBehaviour
     Health health;
     CarMovement carMovement;
     Rigidbody2D rb;
+    Collider2D playerCollider;
 
     bool dead = false;
 
@@ -35,6 +36,7 @@ class Player : MonoBehaviour
         health = GetComponent<Health>();
         carMovement = GetComponent<CarMovement>();
         rb = GetComponent<Rigidbody2D>();
+        playerCollider = GetComponent<Collider2D>();
     }
 
     void OnEnable()
@@ -86,15 +88,25 @@ class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("World Object"))
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Scatter"))
         {
             Health objectHealth = collision.gameObject.GetComponent<Health>();
-            float impactStrength = collision.relativeVelocity.magnitude;
+            float impactStrength = 0f;
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                float contactImpact = contact.normalImpulse / Time.fixedDeltaTime;
+                if (contactImpact > impactStrength)
+                {
+                    impactStrength = contactImpact;
+                }
+            }
+
+            Debug.Log($"Collision with {collision.gameObject.name}, impact strength: {impactStrength}");
 
             if (objectHealth != null)
             {
-                objectHealth.DecreaseHealth(impactStrength * 8); // Damage enemy on collision
-                health.DecreaseHealth(impactStrength * 0.5f); // Damage player on collision
+                objectHealth.DecreaseHealth(impactStrength); // Damage enemy on collision
+                health.DecreaseHealth(impactStrength * 0.01f); // Damage player on collision
             }
         }
     }
@@ -109,15 +121,35 @@ class Player : MonoBehaviour
                 await tunnel.EnterTunnel();
             }
         }
-        else if (other.CompareTag("World Object"))
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Scatter"))
         {
+            ScatterObject scatterObject = other.GetComponent<ScatterObject>();
+            if (scatterObject != null)
+            {
+                
+            }
+            // Push player out of the trigger collider
+            Vector2 closestPointOnOther = other.ClosestPoint(transform.position);
+            Vector2 closestPointOnPlayer = playerCollider.ClosestPoint(other.transform.position);
+            Vector2 pushDirection = (closestPointOnOther - closestPointOnPlayer).normalized;
+            float pushForce = 10000; // Adjust for desired push strength
+            rb.AddForceAtPosition(pushDirection * pushForce, closestPointOnPlayer, ForceMode2D.Force);
+
             Health objectHealth = other.GetComponent<Health>();
             if (objectHealth != null)
             {
+                
+
                 // Calculate damage based on player's current velocity
                 float impactStrength = rb.linearVelocity.magnitude;
-                objectHealth.DecreaseHealth(impactStrength * 8); // Damage object
-                health.DecreaseHealth(impactStrength * 0.1f); // Slight damage to player (reduced from 0.5)
+                objectHealth.DecreaseHealth(impactStrength * 4 * Time.deltaTime); // Damage object
+                // health.DecreaseHealth(impactStrength * 0.1f); // Slight damage to player (reduced from 0.5)
+                
+                
             }
         }
     }

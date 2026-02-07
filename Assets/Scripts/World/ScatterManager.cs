@@ -13,7 +13,7 @@ public enum ScatterTag
 public struct ScatterSettings
 {
     public ScatterTag tag;
-    public WorldObject prefab;
+    public ScatterObject prefab;
     public int targetDensity;
 }
 
@@ -24,7 +24,7 @@ class ScatterManager : MonoBehaviour
     public ScatterSettings[] scatterSettings;
 
     Dictionary<ScatterTag, ScatterSettings> settingsDict = new Dictionary<ScatterTag, ScatterSettings>();
-    Dictionary<ScatterTag, ObjectPool<WorldObject>> scatterPools = new Dictionary<ScatterTag, ObjectPool<WorldObject>>();
+    Dictionary<ScatterTag, ObjectPool<ScatterObject>> scatterPools = new Dictionary<ScatterTag, ObjectPool<ScatterObject>>();
 
     void Awake()
     {
@@ -38,15 +38,15 @@ class ScatterManager : MonoBehaviour
         foreach (var setting in scatterSettings)
         {
             settingsDict[setting.tag] = setting;
-            scatterPools[setting.tag] = new ObjectPool<WorldObject>(setting.prefab, setting.targetDensity, this.transform);
+            scatterPools[setting.tag] = new ObjectPool<ScatterObject>(setting.prefab, setting.targetDensity, this.transform);
         }
     }
 
-    public WorldObject SpawnScatter(ScatterTag tag, Vector2 position)
+    public ScatterObject SpawnScatter(ScatterTag tag, Vector2 position)
     {
         if (scatterPools.ContainsKey(tag))
         {
-            WorldObject obj = scatterPools[tag].Get();
+            ScatterObject obj = scatterPools[tag].Get();
             obj.transform.position = position;
             return obj;
         }
@@ -57,7 +57,7 @@ class ScatterManager : MonoBehaviour
         }
     }
 
-    public void ReturnScatter(ScatterTag tag, WorldObject obj)
+    public void ReturnScatter(ScatterTag tag, ScatterObject obj)
     {
         if (scatterPools.ContainsKey(tag))
         {

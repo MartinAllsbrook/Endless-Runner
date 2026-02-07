@@ -18,7 +18,7 @@ public class World : MonoBehaviour
     [Header("Seed")]
     [SerializeField] int seed = 0;
 
-    ObjectPool<WorldObject> worldObjectPool;
+    ObjectPool<ScatterObject> ScatterObjectPool;
     Dictionary<Vector2Int, Chunk> activeChunks = new Dictionary<Vector2Int, Chunk>();
     Dictionary<Vector2Int, Chunk> allChunks = new Dictionary<Vector2Int, Chunk>();
 
@@ -126,9 +126,9 @@ public class World : MonoBehaviour
         return chunk;
     }
 
-    public WorldObject PlaceObjectAt(Vector2 position, Transform parent)
+    public ScatterObject PlaceObjectAt(Vector2 position, Transform parent)
     {
-        WorldObject obj = worldObjectPool.Get(position, parent);
+        ScatterObject obj = ScatterObjectPool.Get(position, parent);
         return obj;
     }
 }

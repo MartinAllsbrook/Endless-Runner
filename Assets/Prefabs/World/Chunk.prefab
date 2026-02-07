@@ -137,3 +137,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chunk
   backgroundTransform: {fileID: 7513339357440964901}
+  enemySpawnCount: 0

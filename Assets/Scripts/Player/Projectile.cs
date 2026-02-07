@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Projectile collided with: " + collision.gameObject.name);
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("World Object"))
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Scatter"))
         {
             var objectHealth = collision.gameObject.GetComponent<Health>();
             if (objectHealth != null)

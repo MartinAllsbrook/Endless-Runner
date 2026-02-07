@@ -4,11 +4,12 @@ using System.Collections.Generic;
 public class Chunk : MonoBehaviour
 {
     [SerializeField] Transform backgroundTransform;
+    [SerializeField] int enemySpawnCount = 1;
 
     Dictionary<ScatterTag, Vector2[]> scatterPoints = new Dictionary<ScatterTag, Vector2[]>();
     Vector2 chunkPosition;
     float chunkSize;
-    WorldObject[] scatteredObjects;
+    ScatterObject[] scatteredObjects;
 
     bool initialized = false;
     public void Initialize(Vector2 _chunkPosition, float _chunkSize)
@@ -59,12 +60,14 @@ public class Chunk : MonoBehaviour
             numPoints += points.Length;
         }
 
-        scatteredObjects = new WorldObject[numPoints];
+        scatteredObjects = new ScatterObject[numPoints];
     }
 
     void SpawnEnemies()
     {
-        Vector2[] points = BlueNoise.GenerateWithCount(chunkPosition, chunkPosition + Vector2.one * chunkSize, 5);
+        if (enemySpawnCount <= 0) return;
+
+        Vector2[] points = BlueNoise.GenerateWithCount(chunkPosition, chunkPosition + Vector2.one * chunkSize, enemySpawnCount);
         foreach (var point in points)
         {
             EnemyManager.Instance.SpawnEnemyAt(point);

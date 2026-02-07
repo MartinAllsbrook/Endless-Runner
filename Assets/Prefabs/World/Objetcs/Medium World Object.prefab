@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7751195915411779193}
   - component: {fileID: 7335731073876758776}
-  - component: {fileID: 6035507566771580505}
+  - component: {fileID: 8143431680953445852}
   - component: {fileID: 3773666099979727427}
   - component: {fileID: 173214665657551630}
+  - component: {fileID: -6375487497217439083}
   m_Layer: 0
   m_Name: Medium World Object
-  m_TagString: World Object
+  m_TagString: Scatter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,7 +95,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &6035507566771580505
+--- !u!114 &8143431680953445852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,9 +104,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8268799292672452236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 059bd6aef5a9c984bb4cf396b5e547f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ed8be87850ee4648a9bfc180dd4328d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  m_EditorClassIdentifier: Assembly-CSharp::ScatterObject
+  scatterTag: 200
+  resistance: 0.99
 --- !u!61 &3773666099979727427
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -165,3 +168,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 100
+--- !u!50 &-6375487497217439083
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268799292672452236}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 100
+  m_LinearDamping: 5
+  m_AngularDamping: 1
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4

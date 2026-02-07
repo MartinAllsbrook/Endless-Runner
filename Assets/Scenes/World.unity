@@ -313,13 +313,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScatterManager
   scatterSettings:
   - tag: 100
-    prefab: {fileID: 6035507566771580505, guid: f3d29122a90c7fe4aa5c8706a2fd8212, type: 3}
+    prefab: {fileID: 351942167020947537, guid: f3d29122a90c7fe4aa5c8706a2fd8212, type: 3}
     targetDensity: 3
   - tag: 200
-    prefab: {fileID: 6035507566771580505, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
+    prefab: {fileID: 8143431680953445852, guid: 511d9db3a95bd8547bb225f4420bc3bc, type: 3}
     targetDensity: 10
   - tag: 300
-    prefab: {fileID: 6035507566771580505, guid: 9638b0332deb91e4aa97ee4eebd30910, type: 3}
+    prefab: {fileID: 6307268685987628744, guid: 9638b0332deb91e4aa97ee4eebd30910, type: 3}
     targetDensity: 150
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

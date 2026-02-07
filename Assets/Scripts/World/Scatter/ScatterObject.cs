@@ -2,11 +2,16 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 [RequireComponent(typeof(Health))]
-public class WorldObject : MonoBehaviour, IPoolable<WorldObject>
+public class ScatterObject : MonoBehaviour, IPoolable<ScatterObject>
 {
-    ObjectPool<WorldObject> pool;
+    [SerializeField] ScatterTag scatterTag;
+    [SerializeField] float resistance = 1f;
 
-    public void SetPool(ObjectPool<WorldObject> pool)
+    public float Resistance => resistance;
+
+    ObjectPool<ScatterObject> pool;
+
+    public void SetPool(ObjectPool<ScatterObject> pool)
     {
         this.pool = pool;
     }

@@ -78,11 +78,6 @@ class CarMovement : MonoBehaviour
                 }
             }
         }
-        else if (currentSpeed > 0.1f)
-        {
-            // Apply gentle braking when no input
-            rb.AddForce(-velocity.normalized * brakeForce * 0.15f, ForceMode2D.Force);
-        }
 
         // Apply steering (only when moving)
         if (Mathf.Abs(steerInput) > 0.1f && currentSpeed > minSpeedForTurn)
