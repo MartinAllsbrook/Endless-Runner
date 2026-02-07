@@ -94,10 +94,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3194791642850458528}
   - component: {fileID: 8074523175339371606}
+  - component: {fileID: 4262848981007413409}
   - component: {fileID: 4150537489924053155}
   - component: {fileID: 4196361760701124181}
   - component: {fileID: 7922596392487042296}
-  - component: {fileID: 4262848981007413409}
   - component: {fileID: 3684296723381556995}
   m_Layer: 6
   m_Name: Player
@@ -139,6 +139,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   guns: []
+--- !u!114 &4262848981007413409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794666425406141046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17345abb5d2135b4aa5bc209e39637ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarMovement
+  driftFactor: 0.95
+  acceleration: 10000
+  turnFactor: 8
+  speedSteeringFactor: 64
+  rollingResistance: 1500
+  maxSpeedKPH: 150
 --- !u!50 &4150537489924053155
 Rigidbody2D:
   serializedVersion: 5
@@ -225,26 +243,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 100
---- !u!114 &4262848981007413409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1794666425406141046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17345abb5d2135b4aa5bc209e39637ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarMovement
-  acceleration: 5000
-  maxSpeed: 20
-  reverseMaxSpeed: 8
-  turnSpeed: 200000
-  brakeForce: 100000
-  drag: 1500
-  lateralFriction: 10000
-  minSpeedForTurn: 0.01
 --- !u!114 &3684296723381556995
 MonoBehaviour:
   m_ObjectHideFlags: 0

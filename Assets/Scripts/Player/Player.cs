@@ -75,7 +75,7 @@ class Player : MonoBehaviour
     {
         // Send input to CarMovement component
         Vector2 movementInput = new Vector2(steerInput, throttleInput);
-        carMovement.SetMovementInput(movementInput);
+        carMovement.SetInput(movementInput);
     }
 
     async void Die()
