@@ -12,7 +12,7 @@ class Player : MonoBehaviour
     public static Player Instance;
 
     [SerializeField] Gun[] guns;
-
+    [SerializeField] float collisionDamageFactor = 0.01f;
     float steerInput = 0f;
     float throttleInput = 0f;
     bool shootInput = false;
@@ -87,31 +87,6 @@ class Player : MonoBehaviour
 
         Debug.Log("Player has died!");
         await GameManager.Instance.EndGame();
-    }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Scatter"))
-        {
-            Health objectHealth = collision.gameObject.GetComponent<Health>();
-            float impactStrength = 0f;
-            foreach (ContactPoint2D contact in collision.contacts)
-            {
-                float contactImpact = contact.normalImpulse / Time.fixedDeltaTime;
-                if (contactImpact > impactStrength)
-                {
-                    impactStrength = contactImpact;
-                }
-            }
-
-            // Debug.Log($"Collision with {collision.gameObject.name}, {collision.contactCount} contact points, impact strength: {impactStrength}");
-
-            if (objectHealth != null)
-            {
-                objectHealth.DecreaseHealth(impactStrength); // Damage enemy on collision
-                // health.DecreaseHealth(impactStrength * 0.01f); // Damage player on collision
-            }
-        }
     }
 
     async void OnTriggerEnter2D(Collider2D other)

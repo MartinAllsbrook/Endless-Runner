@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7751195915411779193}
-  - component: {fileID: 7335731073876758776}
+  - component: {fileID: 7852822466056802016}
   - component: {fileID: 6307268685987628744}
   - component: {fileID: 173214665657551630}
+  - component: {fileID: 7335731073876758776}
   - component: {fileID: -5383925747528710505}
   - component: {fileID: -1475220049687483164}
   m_Layer: 9
@@ -36,6 +37,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7852822466056802016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268799292672452236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32df15f0c81b40245b2bacf47ee1fa4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollidableObject
+  impactResistance: 0.02
+--- !u!114 &6307268685987628744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268799292672452236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed8be87850ee4648a9bfc180dd4328d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScatterObject
+  scatterTag: 300
+  resistance: 0.999
+--- !u!114 &173214665657551630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268799292672452236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e864f31793325a545a0c4e42861c2692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 10
 --- !u!212 &7335731073876758776
 SpriteRenderer:
   serializedVersion: 2
@@ -95,33 +136,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &6307268685987628744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8268799292672452236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ed8be87850ee4648a9bfc180dd4328d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScatterObject
-  scatterTag: 300
-  resistance: 0.999
---- !u!114 &173214665657551630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8268799292672452236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e864f31793325a545a0c4e42861c2692, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 10
 --- !u!50 &-5383925747528710505
 Rigidbody2D:
   serializedVersion: 5

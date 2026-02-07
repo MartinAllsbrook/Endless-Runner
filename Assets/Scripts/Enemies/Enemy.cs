@@ -3,6 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(CollidableObject))]
 class Enemy : MonoBehaviour, IPoolable<Enemy>
 {
     [SerializeField] float speed = 2f;

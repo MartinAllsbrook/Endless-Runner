@@ -47,7 +47,7 @@ class ScatterManager : MonoBehaviour
         if (scatterPools.ContainsKey(tag))
         {
             ScatterObject obj = scatterPools[tag].Get();
-            obj.transform.position = position;
+            obj.SetPosition(position);
             return obj;
         }
         else

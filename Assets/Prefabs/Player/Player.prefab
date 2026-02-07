@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   guns: []
+  collisionDamageFactor: 0.003
 --- !u!114 &4262848981007413409
 MonoBehaviour:
   m_ObjectHideFlags: 0
