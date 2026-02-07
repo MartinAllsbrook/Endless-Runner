@@ -11,11 +11,12 @@ class Player : MonoBehaviour
 {
     public static Player Instance;
 
+    [SerializeField] Gun[] guns;
+
     float steerInput = 0f;
     float throttleInput = 0f;
     bool shootInput = false;
 
-    SwivelGun swivelGun;
     Health health;
     CarMovement carMovement;
     Rigidbody2D rb;
@@ -32,7 +33,6 @@ class Player : MonoBehaviour
             Destroy(gameObject);
 
         // Get components
-        swivelGun = GetComponentInChildren<SwivelGun>();
         health = GetComponent<Health>();
         carMovement = GetComponent<CarMovement>();
         rb = GetComponent<Rigidbody2D>();
@@ -64,7 +64,10 @@ class Player : MonoBehaviour
         // Handle shooting
         if (shootInput)
         {
-            swivelGun.TryFire();
+            foreach (Gun gun in guns)
+            {
+                gun.TryFire();
+            }
         }
     }
 
@@ -86,7 +89,7 @@ class Player : MonoBehaviour
         await GameManager.Instance.EndGame();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Scatter"))
         {
@@ -101,12 +104,12 @@ class Player : MonoBehaviour
                 }
             }
 
-            Debug.Log($"Collision with {collision.gameObject.name}, impact strength: {impactStrength}");
+            // Debug.Log($"Collision with {collision.gameObject.name}, {collision.contactCount} contact points, impact strength: {impactStrength}");
 
             if (objectHealth != null)
             {
                 objectHealth.DecreaseHealth(impactStrength); // Damage enemy on collision
-                health.DecreaseHealth(impactStrength * 0.01f); // Damage player on collision
+                // health.DecreaseHealth(impactStrength * 0.01f); // Damage player on collision
             }
         }
     }
@@ -119,37 +122,6 @@ class Player : MonoBehaviour
             if (tunnel != null)
             {
                 await tunnel.EnterTunnel();
-            }
-        }
-    }
-
-    void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.CompareTag("Scatter"))
-        {
-            ScatterObject scatterObject = other.GetComponent<ScatterObject>();
-            if (scatterObject != null)
-            {
-                
-            }
-            // Push player out of the trigger collider
-            Vector2 closestPointOnOther = other.ClosestPoint(transform.position);
-            Vector2 closestPointOnPlayer = playerCollider.ClosestPoint(other.transform.position);
-            Vector2 pushDirection = (closestPointOnOther - closestPointOnPlayer).normalized;
-            float pushForce = 10000; // Adjust for desired push strength
-            rb.AddForceAtPosition(pushDirection * pushForce, closestPointOnPlayer, ForceMode2D.Force);
-
-            Health objectHealth = other.GetComponent<Health>();
-            if (objectHealth != null)
-            {
-                
-
-                // Calculate damage based on player's current velocity
-                float impactStrength = rb.linearVelocity.magnitude;
-                objectHealth.DecreaseHealth(impactStrength * 4 * Time.deltaTime); // Damage object
-                // health.DecreaseHealth(impactStrength * 0.1f); // Slight damage to player (reduced from 0.5)
-                
-                
             }
         }
     }
@@ -172,7 +144,6 @@ class Player : MonoBehaviour
 
     void HandleThrottle(float value)
     {
-        Debug.Log("Throttle input: " + value);
         throttleInput = value;
     }
 

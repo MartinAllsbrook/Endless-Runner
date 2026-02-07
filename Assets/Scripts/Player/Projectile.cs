@@ -1,8 +1,12 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(TrailRenderer))]
 public class Projectile : MonoBehaviour, IPoolable<Projectile>
 {
+    TrailRenderer trailRenderer;
+
     float lifetime;
     Vector3 startPosition;
     ObjectPool<Projectile> pool;
@@ -12,6 +16,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
 
     public void SetPool(ObjectPool<Projectile> _pool)
@@ -24,6 +29,7 @@ public class Projectile : MonoBehaviour, IPoolable<Projectile>
         rb.linearVelocity = velocity;
         lifetime = _lifetime;
 
+        trailRenderer.Clear();
         startPosition = transform.position;
     }
 
