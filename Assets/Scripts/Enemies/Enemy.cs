@@ -13,7 +13,7 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
     [SerializeField] Color attackColor = Color.red;
     Color originalColor;
     SpriteRenderer spriteRenderer;
-    Health health;
+    protected Health health;
     float attackCooldown;
     bool playerInRange = false;
 
@@ -54,7 +54,7 @@ class Enemy : MonoBehaviour, IPoolable<Enemy>
         }
     }
 
-    void Attack()
+    protected virtual void Attack()
     {
         StartCoroutine(PlayAttackEffect());
         var playerHealth = Player.Instance.GetComponent<Health>();

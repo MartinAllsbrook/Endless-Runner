@@ -9,6 +9,10 @@ public class Health : MonoBehaviour
     // Private fields
     float currentHealth;
 
+    // Properties
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
+
     // Events
     public event Action<float> OnHealthChanged = delegate { };
     public event Action<float> OnHealthChangedPercent = delegate { };
