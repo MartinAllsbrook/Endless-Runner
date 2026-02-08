@@ -1,11 +1,27 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+struct MapMarker
+{
+    public Transform WorldTransform;
+    public RectTransform MinimapIconTransform;
+
+    public Vector3 GetMapPosition(Vector3 playerPosition, float mapRadius, float mapScale)
+    {
+        Vector3 offset = WorldTransform.position - playerPosition;
+        Vector3 clampedOffset = Vector3.ClampMagnitude(offset, mapRadius);
+        return clampedOffset * mapScale;
+    }
+}
 
 class Minimap : MonoBehaviour
 {
-    [SerializeField] Transform playerIcon;
+    [SerializeField] RectTransform playerIcon;
     [SerializeField] float mapScale = 0.1f;
-    [SerializeField] RectTransform tunnelIndicator;
+    [SerializeField] RectTransform mapIconPrefab;
 
+    List<MapMarker> minimapIcons = new List<MapMarker>();
     TunnelPOI tunnel;
 
     float size;
@@ -14,45 +30,32 @@ class Minimap : MonoBehaviour
     void Awake()
     {
         size = gameObject.GetComponent<RectTransform>().rect.width;
+        mapRadius = size / mapScale / 2f;
     }
 
-    void OnEnable()
+    public void AddTransformToMinimap(Transform worldTransform, Sprite mapIcon)
     {
-        Debug.Log("Minimap: Subscribing to OnWorldLoaded");
-        GameManager.OnWorldLoaded += HandleWorldLoaded;
-    }
+        RectTransform newMapIconTransform = Instantiate(mapIconPrefab, transform);
+        newMapIconTransform.GetComponent<Image>().sprite = mapIcon;
 
-    void OnDisable()
-    {
-        Debug.Log("Minimap: Unsubscribing from OnWorldLoaded");
-        GameManager.OnWorldLoaded -= HandleWorldLoaded;
-    }
-
-    void HandleWorldLoaded()
-    {
-        Debug.Log("Minimap: World Loaded - Finding Tunnel");
-        tunnel = FindFirstObjectByType<TunnelPOI>();
+        MapMarker newIcon = new MapMarker
+        {
+            WorldTransform = worldTransform,
+            MinimapIconTransform = newMapIconTransform
+        };
+        minimapIcons.Add(newIcon);
     }
 
     void Update()
     {
         mapRadius = size / mapScale / 2f;
-        if (tunnel != null)
+        
+        foreach (var icon in minimapIcons)
         {
-            Vector3 tunnelPosition = tunnel.transform.position;
-            Vector3 playerPosition = Player.Instance.transform.position;
-
-            Vector3 offset = playerPosition - tunnelPosition;
-            if (offset.magnitude > mapRadius)
-            {
-                offset = offset.normalized * mapRadius;
-            }
-
-            offset *= mapScale;
-            offset *= -1f;
-
-            tunnelIndicator.anchoredPosition = offset;
+            Vector3 newIconPosition = icon.GetMapPosition(Player.Instance.transform.position, mapRadius, mapScale);
+            icon.MinimapIconTransform.anchoredPosition = newIconPosition;
         }
+
         if (Player.Instance != null)
         {   
             playerIcon.rotation = Player.Instance.transform.rotation;

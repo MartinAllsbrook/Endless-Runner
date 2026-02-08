@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1420659020476859594}
   - component: {fileID: 1325512320978219768}
   - component: {fileID: 8600944457261836127}
+  - component: {fileID: 7131794596692468838}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -72,3 +73,22 @@ MonoBehaviour:
   - tag: 300
     prefab: {fileID: 6307268685987628744, guid: 9638b0332deb91e4aa97ee4eebd30910, type: 3}
     targetDensity: 150
+--- !u!114 &7131794596692468838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10856211051874293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7db51e607d47964c986307f8be216c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::POIManager
+  tunnelPrefab: {fileID: 2418343430992677358, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
+  poiPrefabs:
+  - {fileID: 8687187704201345782, guid: 4e4f522c29887cb4098c51253cf5e5bb, type: 3}
+  spawnAnnulusInnerRadius: 50
+  spawnAnnulusOuterRadius: 1000
+  tunnelSpawnAnnulusInnerRadius: 450
+  tunnelSpawnAnnulusOuterRadius: 650

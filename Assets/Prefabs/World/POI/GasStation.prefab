@@ -424,6 +424,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7898412715689931260}
   - component: {fileID: 5271112158779420865}
+  - component: {fileID: 8687187704201345782}
   m_Layer: 0
   m_Name: GasStation
   m_TagString: Untagged
@@ -495,3 +496,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 4}
   m_EdgeRadius: 0
+--- !u!114 &8687187704201345782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9095266754081234718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e813317120266c4cbdc13dbe579cfe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GasStationPOI
+  countInWorld: 3
+  radius: 10
+  minimapIcon: {fileID: -7968582897747660167, guid: 3d7c41b6365e6654faf207205bdd329c, type: 3}

@@ -4,6 +4,14 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Collider2D))]
 abstract class PointOfInterest : MonoBehaviour
 {
+    [SerializeField] int countInWorld = 3;
+    [SerializeField] float radius = 10f;
+    [SerializeField] Sprite minimapIcon;
+
+    public int CountInWorld => countInWorld;
+    public float Radius => radius;
+    public Sprite MinimapIcon => minimapIcon;
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
