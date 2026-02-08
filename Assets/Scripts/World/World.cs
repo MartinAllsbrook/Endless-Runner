@@ -22,11 +22,7 @@ public class World : MonoBehaviour
     Dictionary<Vector2Int, Chunk> activeChunks = new Dictionary<Vector2Int, Chunk>();
     Dictionary<Vector2Int, Chunk> allChunks = new Dictionary<Vector2Int, Chunk>();
     POIManager poiManager;
-    float lastSpawnY = float.MinValue;
-    float lastEnemySpawnY = float.MinValue;
-    float spawnDistance = 5f;
-    float enemySpawnDistance = 8f;
-
+    
     void Awake()
     {
         if (seed == 0)

@@ -21,7 +21,7 @@ class Minimap : MonoBehaviour
     [SerializeField] float mapScale = 0.1f;
     [SerializeField] RectTransform mapIconPrefab;
 
-    List<MapMarker> minimapIcons = new List<MapMarker>();
+    List<MapMarker> minimapIcons = new List<MapMarker>(); 
     TunnelPOI tunnel;
 
     float size;
@@ -31,6 +31,13 @@ class Minimap : MonoBehaviour
     {
         size = gameObject.GetComponent<RectTransform>().rect.width;
         mapRadius = size / mapScale / 2f;
+
+        // Clear minimap icons when world is closed to prevent references to objects in removed scene
+        // I feel like there has to be a better way to organize this because this seems delicate
+        GameManager.BeforeWorldClosed += () =>
+        {
+            minimapIcons.Clear();
+        };
     }
 
     public void AddTransformToMinimap(Transform worldTransform, Sprite mapIcon)
