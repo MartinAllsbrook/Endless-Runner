@@ -510,4 +510,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GasStationPOI
   countInWorld: 3
   radius: 10
-  minimapIcon: {fileID: -7968582897747660167, guid: 3d7c41b6365e6654faf207205bdd329c, type: 3}
+  mapIcon: {fileID: -8393169711176511969, guid: 9c5b863ef79971d40be6eb173bbba3ef, type: 3}

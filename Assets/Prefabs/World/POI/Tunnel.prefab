@@ -97,7 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Tunnel
   countInWorld: 1
   radius: 10
-  minimapIcon: {fileID: -55898976401888855, guid: 4b7985a9a4075ad43b3eb111ae6ffeba, type: 3}
+  mapIcon: {fileID: -55898976401888855, guid: 4b7985a9a4075ad43b3eb111ae6ffeba, type: 3}
   tunnelExitPoint: {fileID: 5719491092210243890}
 --- !u!1 &2322844848099560068
 GameObject:

@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     public static event Action OnTunnelEnteredAndLoaded = delegate { };
     public static event Action OnTunnelExitedAndWorldLoaded = delegate { };
     public static event Action OnWorldLoaded = delegate { };
-    public static event Action BeforeWorldClosed = delegate { };
 
     [SerializeField] Camera backupCamera;
 
@@ -110,12 +109,6 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("World scene loaded successfully.");
         OnWorldLoaded.Invoke();
-    }
-
-    async Task CloseWorld()
-    {
-        BeforeWorldClosed.Invoke();
-        await SceneManager.UnloadSceneAsync("World");
     }
     #endregion
 }

@@ -6,6 +6,10 @@ using UnityEngine;
 
 class POIManager : MonoBehaviour
 {
+    public static POIManager Instance { get; private set; }
+    public static event Action<PointOfInterest[]> OnPOIsSpawned;
+    public PointOfInterest[] POIs => pointsOfInterest;
+
     [SerializeField] TunnelPOI tunnelPrefab;
     [SerializeField] PointOfInterest[] poiPrefabs;
     [SerializeField] float spawnAnnulusInnerRadius = 50f;
@@ -13,48 +17,65 @@ class POIManager : MonoBehaviour
     [SerializeField] float tunnelSpawnAnnulusInnerRadius = 450f;
     [SerializeField] float tunnelSpawnAnnulusOuterRadius = 650f;
 
-    List<PointOfInterest> spawnedPOIs = new List<PointOfInterest>(); 
+    PointOfInterest[] pointsOfInterest = new PointOfInterest[0];
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(this.gameObject);
+        else
+            Instance = this;
+    }
 
     public void SpawnPOIs()
     {
+        List<PointOfInterest> poiList = new List<PointOfInterest>(); 
+
         // Start by spawning the tunnel
-        SpawnTunnel();
+        TunnelPOI tunnelPOI = SpawnTunnel();
+        poiList.Add(tunnelPOI);
 
         // Then spawn other POIs
-        foreach (var poi in poiPrefabs)
+        foreach (var poiPrefab in poiPrefabs)
         {
-            for (int i = 0; i < poi.CountInWorld; i++)
+            for (int i = 0; i < poiPrefab.CountInWorld; i++)
             {
-                SpawnPOI(poi);
+                PointOfInterest newPOI = SpawnPOI(poiPrefab, poiList);
+                if (newPOI != null)
+                    poiList.Add(newPOI);
             }
         }
+
+        pointsOfInterest = poiList.ToArray();
+        OnPOIsSpawned?.Invoke(pointsOfInterest);
     }
 
-    void SpawnTunnel()
+    TunnelPOI SpawnTunnel()
     {
         Vector3 spawnPosition = GetRandomPositionInAnnulus(tunnelSpawnAnnulusInnerRadius, tunnelSpawnAnnulusOuterRadius);
         TunnelPOI tunnel = Instantiate(tunnelPrefab, spawnPosition, Quaternion.identity);
-        AddPOI(tunnel);
+        return tunnel;
     }
 
-    void SpawnPOI(PointOfInterest poiPrefab)
+    PointOfInterest SpawnPOI(PointOfInterest poiPrefab, List<PointOfInterest> poiList)
     {
-        for (int attempt = 0; attempt < 10; attempt++)
+        for (int attempt = 0; attempt < 30; attempt++)
         {
             Vector3 spawnPosition = GetRandomPositionInAnnulus(spawnAnnulusInnerRadius, spawnAnnulusOuterRadius);
 
-            if (IsPositionValid(spawnPosition, poiPrefab.Radius))
+            if (IsPositionValid(spawnPosition, poiPrefab.Radius, poiList))
             {
                 PointOfInterest newPOI = Instantiate(poiPrefab, spawnPosition, Quaternion.identity);
-                AddPOI(newPOI);
-                return;
+                return newPOI;
             }
         }
+        Debug.LogWarning($"Failed to spawn POI of type {poiPrefab.name} after multiple attempts.");
+        return null;
     }
 
-    bool IsPositionValid(Vector3 position, float radius)
+    bool IsPositionValid(Vector3 position, float radius, List<PointOfInterest> poiList)
     {
-        foreach (var existingPOI in spawnedPOIs)
+        foreach (var existingPOI in poiList)
         {
             float sumOfRadii = radius + existingPOI.Radius;
             float distance = Vector3.Distance(position, existingPOI.transform.position);
@@ -65,16 +86,6 @@ class POIManager : MonoBehaviour
             }
         }
         return true;
-    }
-
-    void AddPOI(PointOfInterest poi)
-    {
-        spawnedPOIs.Add(poi);
-        Minimap minimap = FindFirstObjectByType<Minimap>();
-        if (minimap != null)
-        {
-            minimap.AddTransformToMinimap(poi.transform, poi.MinimapIcon);
-        }
     }
 
     Vector3 GetRandomPositionInAnnulus(float innerRadius, float outerRadius)

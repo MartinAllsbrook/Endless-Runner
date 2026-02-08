@@ -6,11 +6,11 @@ abstract class PointOfInterest : MonoBehaviour
 {
     [SerializeField] int countInWorld = 3;
     [SerializeField] float radius = 10f;
-    [SerializeField] Sprite minimapIcon;
+    [SerializeField] Sprite mapIcon;
 
     public int CountInWorld => countInWorld;
     public float Radius => radius;
-    public Sprite MinimapIcon => minimapIcon;
+    public Sprite MapIcon => mapIcon;
 
     void OnTriggerEnter2D(Collider2D collision)
     {

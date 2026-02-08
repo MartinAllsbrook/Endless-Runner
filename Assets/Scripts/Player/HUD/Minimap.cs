@@ -21,7 +21,7 @@ class Minimap : MonoBehaviour
     [SerializeField] float mapScale = 0.1f;
     [SerializeField] RectTransform mapIconPrefab;
 
-    List<MapMarker> minimapIcons = new List<MapMarker>(); 
+    MapMarker[] minimapIcons; 
     TunnelPOI tunnel;
 
     float size;
@@ -31,36 +31,49 @@ class Minimap : MonoBehaviour
     {
         size = gameObject.GetComponent<RectTransform>().rect.width;
         mapRadius = size / mapScale / 2f;
-
-        // Clear minimap icons when world is closed to prevent references to objects in removed scene
-        // I feel like there has to be a better way to organize this because this seems delicate
-        GameManager.BeforeWorldClosed += () =>
-        {
-            minimapIcons.Clear();
-        };
     }
 
-    public void AddTransformToMinimap(Transform worldTransform, Sprite mapIcon)
+    void OnEnable()
     {
-        RectTransform newMapIconTransform = Instantiate(mapIconPrefab, transform);
-        newMapIconTransform.GetComponent<Image>().sprite = mapIcon;
+        POIManager.OnPOIsSpawned += HandlePOIsSpawned;
+    }
 
-        MapMarker newIcon = new MapMarker
+    void OnDisable()
+    {
+        POIManager.OnPOIsSpawned -= HandlePOIsSpawned;
+    }
+
+    void HandlePOIsSpawned(PointOfInterest[] pois)
+    {
+        List<MapMarker> newIcons = new List<MapMarker>();
+
+        foreach (var poi in pois)
         {
-            WorldTransform = worldTransform,
-            MinimapIconTransform = newMapIconTransform
-        };
-        minimapIcons.Add(newIcon);
+            RectTransform newMapIconTransform = Instantiate(mapIconPrefab, transform);
+            newMapIconTransform.GetComponent<Image>().sprite = poi.MapIcon;
+
+            MapMarker newIcon = new MapMarker
+            {
+                WorldTransform = poi.transform,
+                MinimapIconTransform = newMapIconTransform
+            };
+            newIcons.Add(newIcon);
+        }
+
+        minimapIcons = newIcons.ToArray();
     }
 
     void Update()
     {
         mapRadius = size / mapScale / 2f;
         
-        foreach (var icon in minimapIcons)
-        {
-            Vector3 newIconPosition = icon.GetMapPosition(Player.Instance.transform.position, mapRadius, mapScale);
-            icon.MinimapIconTransform.anchoredPosition = newIconPosition;
+        if (minimapIcons != null)
+        {    
+            foreach (var icon in minimapIcons)
+            {
+                Vector3 newIconPosition = icon.GetMapPosition(Player.Instance.transform.position, mapRadius, mapScale);
+                icon.MinimapIconTransform.anchoredPosition = newIconPosition;
+            }
         }
 
         if (Player.Instance != null)
