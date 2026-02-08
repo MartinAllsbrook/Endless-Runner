@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "New Actions",
+    "name": "InputActions",
     "maps": [
         {
             "name": "Default",
@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ToggleMap",
+                    "type": "Button",
+                    "id": "a0f7b439-ad8b-4f16-a348-1c858f7ea98a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -111,6 +120,17 @@
                     "action": "Throttle",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "1c95c699-7554-4e7e-b655-db4b9fa78c21",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
