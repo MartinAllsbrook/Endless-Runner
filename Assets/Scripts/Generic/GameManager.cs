@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public static event Action OnTunnelEnteredAndLoaded = delegate { };
+    public static event Action OnTunnelEntered = delegate { };
     public static event Action OnTunnelExitedAndWorldLoaded = delegate { };
     public static event Action OnWorldLoaded = delegate { };
 
@@ -76,8 +76,8 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         await SceneManager.LoadSceneAsync("TunnelUI", LoadSceneMode.Additive);
+        OnTunnelEntered.Invoke();
         await SceneManager.UnloadSceneAsync("World");
-        OnTunnelEnteredAndLoaded.Invoke();
     }
 
     public async Task ExitTunnel()

@@ -6,8 +6,8 @@ class Minimap : MonoBehaviour
 {
     [SerializeField] float mapScale = 0.1f;
     [SerializeField] RectTransform playerIcon;
+    [SerializeField] Map map;
 
-    MapMarker[] mapMarkers;
     float size;
     float mapRadius;
 
@@ -25,10 +25,10 @@ class Minimap : MonoBehaviour
 
     void UpdateMapPositions()
     {
-        if (mapMarkers == null)
+        if (map.MapMarkers == null)
             return;
 
-        foreach (var marker in mapMarkers)
+        foreach (var marker in map.MapMarkers)
         {
             marker.UpdateMinimapPosition(Player.Instance.transform.position, mapScale, mapRadius);
         }
@@ -40,10 +40,5 @@ class Minimap : MonoBehaviour
             return;
 
         playerIcon.rotation = Player.Instance.transform.rotation;
-    }
-
-    public void SetMapMarkers(MapMarker[] markers)
-    {
-        mapMarkers = markers;
     }
 }

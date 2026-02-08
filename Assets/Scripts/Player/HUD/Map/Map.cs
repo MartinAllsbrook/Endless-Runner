@@ -7,11 +7,15 @@ class Map : MonoBehaviour
     [SerializeField] RectTransform mapPanel;
     [SerializeField] Minimap minimap;
     [SerializeField] RectTransform mapIconPrefab;
+    [SerializeField] RectTransform playerIcon;
     [SerializeField] float mapScale = 0.1f;
 
     MapMarker[] mapMarkers;
+    public MapMarker[] MapMarkers => mapMarkers;
 
     float mapDisplaySize => mapPanel.rect.width;
+
+    List<RectTransform> instantiatedIcons = new List<RectTransform>();
 
     void Awake()
     {
@@ -22,12 +26,14 @@ class Map : MonoBehaviour
     {
         POIManager.OnPOIsSpawned += HandlePOIsSpawned;
         InputReader.OnToggleMap += ToggleMap;
+        GameManager.OnTunnelEntered += CloseAndClear;
     }
 
     void OnDisable()
     {
         POIManager.OnPOIsSpawned -= HandlePOIsSpawned;
         InputReader.OnToggleMap -= ToggleMap;
+        GameManager.OnTunnelEntered -= CloseAndClear;
     }
 
     void HandlePOIsSpawned(PointOfInterest[] pois)
@@ -44,19 +50,29 @@ class Map : MonoBehaviour
         }
 
         mapMarkers = newMarkers.ToArray();
-        minimap.SetMapMarkers(mapMarkers);
     }
 
     RectTransform CreateMapIcon(PointOfInterest poi, Transform parent)
     {
         RectTransform newIcon = Instantiate(mapIconPrefab, parent);
         newIcon.GetComponent<Image>().sprite = poi.MapIcon;
+        instantiatedIcons.Add(newIcon);
         return newIcon;
     }
 
     void Update()
     {
         UpdateMapPositions();
+        UpdatePlayerIcon();
+    }
+
+    void UpdatePlayerIcon()
+    {
+        if (Player.Instance == null)
+            return;
+
+        playerIcon.rotation = Player.Instance.transform.rotation;
+        playerIcon.anchoredPosition = Player.Instance.transform.position * mapScale;
     }
 
     void UpdateMapPositions()
@@ -68,6 +84,34 @@ class Map : MonoBehaviour
         {
             icon.UpdateMapPosition(mapScale);
         }
+    }
+
+    void CloseAndClear()
+    {
+        mapPanel.gameObject.SetActive(false);
+        Clear();
+    }
+
+    void Clear()
+    {
+        mapPanel.gameObject.SetActive(false);
+
+        if (mapMarkers != null)
+        {
+            foreach (var marker in mapMarkers)
+            {
+                Destroy(marker.PointOfInterest.gameObject);
+                Destroy(marker.PointOfInterest.gameObject);
+            }
+        }
+
+        foreach (var icon in instantiatedIcons)        
+        {
+            Destroy(icon.gameObject);
+        }
+
+        instantiatedIcons.Clear();
+        mapMarkers = null;
     }
 
     void ToggleMap()

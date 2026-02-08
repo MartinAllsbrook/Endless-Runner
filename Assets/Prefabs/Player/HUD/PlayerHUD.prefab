@@ -875,7 +875,7 @@ GameObject:
   - component: {fileID: 4632600915885502983}
   - component: {fileID: 5104988186743500143}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -916,6 +916,7 @@ MonoBehaviour:
   mapPanel: {fileID: 3823814006297889889}
   minimap: {fileID: 2945960574469439655}
   mapIconPrefab: {fileID: 5927013505674661676, guid: 6bda57398609aed46a2c9c95b26c246b, type: 3}
+  playerIcon: {fileID: 802513801871764050}
   mapScale: 0.25
 --- !u!1 &7609948268602620621
 GameObject:
@@ -1305,6 +1306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Minimap
   mapScale: 1
   playerIcon: {fileID: 1459353258048435877}
+  map: {fileID: 5104988186743500143}
 --- !u!1 &8132459017055141916
 GameObject:
   m_ObjectHideFlags: 0
