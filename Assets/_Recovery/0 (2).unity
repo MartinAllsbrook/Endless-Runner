@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoadGenerator
   spriteShape: {fileID: 1627704963}
   pointSpacing: 50
-  tangentStrength: 25
+  tangentStrength: 100
   curviness: 20
   curveFrequency: 0.05
   randomSeed: 0
