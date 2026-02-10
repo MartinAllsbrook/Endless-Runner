@@ -35,7 +35,7 @@ public class World : MonoBehaviour
             Destroy(gameObject);
 
         poiManager = gameObject.GetComponent<POIManager>();
-        poiManager.SpawnPOIs();
+        poiManager.Generate();
 
         OnWorldLoaded.Invoke();
     }

@@ -13,7 +13,6 @@ class Road : MonoBehaviour
     [SerializeField] float tangentStrength = 100f;
     [SerializeField] float curviness = 20f;
     [SerializeField] float curveFrequency = 0.05f;
-    [SerializeField] int randomSeed = 0;
     
     [Header("Road Collider Settings")]
     [SerializeField] float roadWidth = 20f;
@@ -52,10 +51,7 @@ class Road : MonoBehaviour
         // Calculate how many points we'll need
         float distance = Vector3.Distance(startPoint, endPoint);
         int pointCount = Mathf.Max(2, Mathf.CeilToInt(distance / pointSpacing));
-        
-        // Initialize random with seed for consistent results
-        Random.InitState(randomSeed);
-        
+                
         // Find the points based on a bezier curve and add them to an array
         Vector3[] points = new Vector3[pointCount];
         
@@ -74,7 +70,7 @@ class Road : MonoBehaviour
             {
                 Vector3 direction = (endPoint - startPoint).normalized;
                 Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0f);
-                float offset = Mathf.PerlinNoise(t * curveFrequency * 100f, randomSeed) * curviness;
+                float offset = Mathf.PerlinNoise(t * curveFrequency * 100f, Random.Range(0, 1000)) * curviness;
                 offset = (offset - curviness * 0.5f); // Center around 0
                 position += perpendicular * offset;
             }

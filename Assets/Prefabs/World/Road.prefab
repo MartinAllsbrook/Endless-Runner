@@ -444,6 +444,5 @@ MonoBehaviour:
   tangentStrength: 20
   curviness: 20
   curveFrequency: 0.05
-  randomSeed: 0
   roadWidth: 16
   colliderResolution: 16

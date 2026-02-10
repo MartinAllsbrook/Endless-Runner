@@ -31,7 +31,13 @@ class POIManager : MonoBehaviour
             Instance = this;
     }
 
-    public void SpawnPOIs()
+    public void Generate()
+    {
+        SpawnPOIs();
+        BuildRoads();
+    }
+
+    void SpawnPOIs()
     {
         List<PointOfInterest> poiList = new List<PointOfInterest>(); 
 
@@ -52,6 +58,11 @@ class POIManager : MonoBehaviour
 
         pointsOfInterest = poiList.ToArray();
         OnPOIsSpawned?.Invoke(pointsOfInterest);
+    }
+
+    void BuildRoads()
+    {
+        TunnelPOI tunnelPOI = pointsOfInterest[0] as TunnelPOI;
 
         int closestIndex = -1;
         float closestDistance = float.MaxValue;
@@ -68,14 +79,31 @@ class POIManager : MonoBehaviour
             }
         }
 
+        PointOfInterest closestPOI = pointsOfInterest[closestIndex];
+        closestIndex = -1;
+        closestDistance = float.MaxValue;
+        
+        foreach (Transform connectionPoint in closestPOI.RoadConnectionPoints)
+        {
+            float distance = Vector3.Distance(tunnelPOI.transform.position, connectionPoint.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestIndex = Array.IndexOf(closestPOI.RoadConnectionPoints, connectionPoint);
+            }
+        }
+
+        Transform closestConnectionPoint = closestPOI.RoadConnectionPoints[closestIndex];
+        
         Road road = Instantiate(roadPrefab);
-        road.GenerateRoad(tunnelPOI.RoadConnectionPoints[0].position, tunnelPOI.RoadConnectionPoints[0].up, pointsOfInterest[closestIndex].RoadConnectionPoints[0].position, -pointsOfInterest[closestIndex].RoadConnectionPoints[0].up);
+        road.GenerateRoad(tunnelPOI.RoadConnectionPoints[0].position, tunnelPOI.RoadConnectionPoints[0].up, closestConnectionPoint.position, closestConnectionPoint.up);
     }
 
     TunnelPOI SpawnTunnel()
     {
         Vector3 spawnPosition = GetRandomPositionInAnnulus(tunnelSpawnAnnulusInnerRadius, tunnelSpawnAnnulusOuterRadius);
-        TunnelPOI tunnel = Instantiate(tunnelPrefab, spawnPosition, Quaternion.identity);
+        Quaternion randomRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
+        TunnelPOI tunnel = Instantiate(tunnelPrefab, spawnPosition, randomRotation);
         return tunnel;
     }
 
@@ -87,7 +115,8 @@ class POIManager : MonoBehaviour
 
             if (IsPositionValid(spawnPosition, poiPrefab.Radius, poiList))
             {
-                PointOfInterest newPOI = Instantiate(poiPrefab, spawnPosition, Quaternion.identity);
+                Quaternion randomRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
+                PointOfInterest newPOI = Instantiate(poiPrefab, spawnPosition, randomRotation);
                 return newPOI;
             }
         }
