@@ -23,6 +23,9 @@ class POIManager : MonoBehaviour
 
     PointOfInterest[] pointsOfInterest = new PointOfInterest[0];
 
+    TunnelPOI exitTunnel;
+    TunnelPOI goalTunnel;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,9 +44,12 @@ class POIManager : MonoBehaviour
     {
         List<PointOfInterest> poiList = new List<PointOfInterest>(); 
 
-        // Start by spawning the tunnel
-        TunnelPOI tunnelPOI = SpawnTunnel();
-        poiList.Add(tunnelPOI);
+        // Start by spawning the tunnels
+        exitTunnel = SpawnExitTunnel();
+        poiList.Add(exitTunnel);
+
+        goalTunnel = SpawnGoalTunnel();
+        poiList.Add(goalTunnel);
 
         // Then spawn other POIs
         foreach (var poiPrefab in poiPrefabs)
@@ -62,48 +68,110 @@ class POIManager : MonoBehaviour
 
     void BuildRoads()
     {
-        TunnelPOI tunnelPOI = pointsOfInterest[0] as TunnelPOI;
-
-        int closestIndex = -1;
-        float closestDistance = float.MaxValue;
+        int numberOfRoadsToBuild = 0;
         foreach (var poi in pointsOfInterest)
         {
-            if (poi is TunnelPOI tunnel)
-                continue; // Skip tunnel for closest POI calculation
-
-            float distance = Vector3.Distance(tunnelPOI.transform.position, poi.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestIndex = Array.IndexOf(pointsOfInterest, poi);
-            }
+            numberOfRoadsToBuild += poi.ConnectionPoints.Length;
         }
+        numberOfRoadsToBuild /= 2; // Each road connects 2 points, so divide by 2 to avoid double counting
 
-        PointOfInterest closestPOI = pointsOfInterest[closestIndex];
-        closestIndex = -1;
-        closestDistance = float.MaxValue;
-        
-        foreach (Transform connectionPoint in closestPOI.RoadConnectionPoints)
+        for (int i = 0; i < numberOfRoadsToBuild; i++)
         {
-            float distance = Vector3.Distance(tunnelPOI.transform.position, connectionPoint.position);
-            if (distance < closestDistance)
+            Transform[] connectionPoints = FindClosestConnectionPoints();
+            if (connectionPoints != null)
             {
-                closestDistance = distance;
-                closestIndex = Array.IndexOf(closestPOI.RoadConnectionPoints, connectionPoint);
+                Road newRoad = Instantiate(roadPrefab);
+                newRoad.GenerateRoad(connectionPoints[0].position, connectionPoints[0].up, connectionPoints[1].position, connectionPoints[1].up);
             }
         }
-
-        Transform closestConnectionPoint = closestPOI.RoadConnectionPoints[closestIndex];
-        
-        Road road = Instantiate(roadPrefab);
-        road.GenerateRoad(tunnelPOI.RoadConnectionPoints[0].position, tunnelPOI.RoadConnectionPoints[0].up, closestConnectionPoint.position, closestConnectionPoint.up);
     }
 
-    TunnelPOI SpawnTunnel()
+    Transform[] FindClosestConnectionPoints()
+    {
+        float shortestDistance = float.MaxValue;
+        PointOfInterest closestPOI_1 = null;
+        PointOfInterest closestPOI_2 = null;
+        int closestPointIndex_1 = -1;
+        int closestPointIndex_2 = -1;
+
+        for (int poiIndex_1 = 0; poiIndex_1 < pointsOfInterest.Length; poiIndex_1++)
+        {
+            PointOfInterest poi_1 = pointsOfInterest[poiIndex_1];
+            
+            if (poi_1.AllPointsConnected)
+                continue;
+
+            for (int poiIndex_2 = poiIndex_1 + 1; poiIndex_2 < pointsOfInterest.Length; poiIndex_2++)
+            {
+                PointOfInterest poi_2 = pointsOfInterest[poiIndex_2];
+                
+                if (poi_2.AllPointsConnected)
+                    continue;
+
+                if (poi_1.ConnectedPOIs.Contains(poi_2) || poi_2.ConnectedPOIs.Contains(poi_1))
+                    continue;
+
+                // Here we have two POIs that both have at least one unconnected connection point.
+
+                for (int pointIndex_1 = 0; pointIndex_1 < poi_1.ConnectionPoints.Length; pointIndex_1++)
+                {
+
+                    ConnectionPoint connectionPoint_1 = poi_1.ConnectionPoints[pointIndex_1];
+
+                    if (connectionPoint_1.Connected)
+                        continue;
+
+                    for (int pointIndex_2 = 0; pointIndex_2 < poi_2.ConnectionPoints.Length; pointIndex_2++)
+                    {
+                        ConnectionPoint connectionPoint_2 = poi_2.ConnectionPoints[pointIndex_2];
+
+                        if (connectionPoint_2.Connected)
+                            continue;
+
+                        float distance = Vector3.Distance(connectionPoint_1.Point.position, connectionPoint_2.Point.position);
+
+                        if (distance < shortestDistance)
+                        {
+                            shortestDistance = distance;
+                            closestPOI_1 = poi_1;
+                            closestPOI_2 = poi_2;
+                            closestPointIndex_1 = pointIndex_1;
+                            closestPointIndex_2 = pointIndex_2;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (closestPOI_1 != null && closestPOI_2 != null)
+        {
+            closestPOI_1.ConnectedPOIs.Add(closestPOI_2);
+            closestPOI_2.ConnectedPOIs.Add(closestPOI_1);
+
+            closestPOI_1.ConnectionPoints[closestPointIndex_1].Connected = true;
+            closestPOI_2.ConnectionPoints[closestPointIndex_2].Connected = true;
+
+            return new Transform[] { closestPOI_1.ConnectionPoints[closestPointIndex_1].Point, closestPOI_2.ConnectionPoints[closestPointIndex_2].Point };
+        }
+        else
+        {
+            Debug.LogWarning("No valid connection points found between POIs.");
+            return null;
+        }
+    }
+
+    TunnelPOI SpawnGoalTunnel()
     {
         Vector3 spawnPosition = GetRandomPositionInAnnulus(tunnelSpawnAnnulusInnerRadius, tunnelSpawnAnnulusOuterRadius);
         Quaternion randomRotation = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
         TunnelPOI tunnel = Instantiate(tunnelPrefab, spawnPosition, randomRotation);
+        return tunnel;
+    }
+
+    TunnelPOI SpawnExitTunnel()
+    {
+        TunnelPOI tunnel = Instantiate(tunnelPrefab, Vector3.zero, Quaternion.identity);
+        tunnel.SetAsExitTunnel(true);
         return tunnel;
     }
 

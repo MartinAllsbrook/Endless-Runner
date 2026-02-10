@@ -7,6 +7,13 @@ class TunnelPOI : PointOfInterest
 {
     [SerializeField] Transform tunnelExitPoint;
 
+    bool exitTunnel = false;
+
+    public void SetAsExitTunnel(bool isExit)
+    {
+        exitTunnel = isExit;
+    }
+
     async void EnterTunnel()
     {
         await GameManager.Instance.EnterTunnel();
@@ -22,6 +29,9 @@ class TunnelPOI : PointOfInterest
 
     protected override void OnPlayerEnter()
     {
+        if (exitTunnel) // Cannot enter exit tunnel
+            return;
+        
         EnterTunnel();
     }
 }

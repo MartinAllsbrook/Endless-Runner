@@ -442,7 +442,7 @@ MonoBehaviour:
   roadCollider: {fileID: 6801919544169290957}
   pointSpacing: 50
   tangentStrength: 20
-  curviness: 20
+  curviness: 0
   curveFrequency: 0.05
   roadWidth: 16
   colliderResolution: 16
