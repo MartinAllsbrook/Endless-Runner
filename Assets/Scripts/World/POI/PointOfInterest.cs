@@ -12,6 +12,7 @@ abstract class PointOfInterest : MonoBehaviour
     public int CountInWorld => countInWorld;
     public float Radius => radius;
     public Sprite MapIcon => mapIcon;
+    public Transform[] RoadConnectionPoints => roadConnectionPoints;
 
     void OnTriggerEnter2D(Collider2D collision)
     {

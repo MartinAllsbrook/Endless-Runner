@@ -10,8 +10,12 @@ class POIManager : MonoBehaviour
     public static event Action<PointOfInterest[]> OnPOIsSpawned;
     public PointOfInterest[] POIs => pointsOfInterest;
 
+    [Header("Prefabs")]
     [SerializeField] TunnelPOI tunnelPrefab;
     [SerializeField] PointOfInterest[] poiPrefabs;
+    [SerializeField] Road roadPrefab;
+
+    [Header("Settings")]
     [SerializeField] float spawnAnnulusInnerRadius = 50f;
     [SerializeField] float spawnAnnulusOuterRadius = 1000f;
     [SerializeField] float tunnelSpawnAnnulusInnerRadius = 450f;
@@ -48,6 +52,24 @@ class POIManager : MonoBehaviour
 
         pointsOfInterest = poiList.ToArray();
         OnPOIsSpawned?.Invoke(pointsOfInterest);
+
+        int closestIndex = -1;
+        float closestDistance = float.MaxValue;
+        foreach (var poi in pointsOfInterest)
+        {
+            if (poi is TunnelPOI tunnel)
+                continue; // Skip tunnel for closest POI calculation
+
+            float distance = Vector3.Distance(tunnelPOI.transform.position, poi.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestIndex = Array.IndexOf(pointsOfInterest, poi);
+            }
+        }
+
+        Road road = Instantiate(roadPrefab);
+        road.GenerateRoad(tunnelPOI.RoadConnectionPoints[0].position, tunnelPOI.RoadConnectionPoints[0].up, pointsOfInterest[closestIndex].RoadConnectionPoints[0].position, -pointsOfInterest[closestIndex].RoadConnectionPoints[0].up);
     }
 
     TunnelPOI SpawnTunnel()

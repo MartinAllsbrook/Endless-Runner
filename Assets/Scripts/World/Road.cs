@@ -18,17 +18,21 @@ class Road : MonoBehaviour
     [Header("Road Collider Settings")]
     [SerializeField] float roadWidth = 20f;
     [SerializeField] int colliderResolution = 2;
-
-    Spline spline;
     
     void Start()
     {
-        GenerateRoad();
+        SyncElements();
     }
 
-    void GenerateRoad()
+    public void GenerateRoad(Vector3 startPoint, Vector3 startTangentDirection, Vector3 endPoint, Vector3 endTangentDirection)
     {
-        Spline spline = GenerateSpline(Vector3.zero, Vector3.right, new Vector3(300f, 200f, 0f), -Vector3.right);
+        GenerateNewRoad(startPoint, startTangentDirection, endPoint, endTangentDirection);
+        SyncElements();
+    }
+
+    void SyncElements()
+    {
+        Spline spline = worldSpriteShape.spline;
 
         for (int i = 0; i < spline.GetPointCount(); i++)
         {
@@ -40,7 +44,7 @@ class Road : MonoBehaviour
         GenerateRoadCollider(spline);
     }
 
-    Spline GenerateSpline(Vector3 startPoint, Vector3 startTangentDirection, Vector3 endPoint, Vector3 endTangentDirection)
+    void GenerateNewRoad(Vector3 startPoint, Vector3 startTangentDirection, Vector3 endPoint, Vector3 endTangentDirection)
     {
         Spline spline = worldSpriteShape.spline;
         spline.Clear();
@@ -56,8 +60,8 @@ class Road : MonoBehaviour
         Vector3[] points = new Vector3[pointCount];
         
         Vector3 p0 = startPoint;
-        Vector3 p1 = startPoint + startTangentDirection.normalized * 100f;
-        Vector3 p2 = endPoint + endTangentDirection.normalized * 100f;
+        Vector3 p1 = startPoint + startTangentDirection.normalized * 200f;
+        Vector3 p2 = endPoint + endTangentDirection.normalized * 200f;
         Vector3 p3 = endPoint;
         
         for (int i = 0; i < pointCount; i++)
@@ -101,7 +105,6 @@ class Road : MonoBehaviour
             
             SetOrAddPoint(spline, i, points[i], tangentDirection, tangentStrength);
         }
-        return spline;
     }
     
     void GenerateRoadCollider(Spline spline)

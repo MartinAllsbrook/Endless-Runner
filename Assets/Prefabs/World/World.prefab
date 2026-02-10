@@ -88,6 +88,7 @@ MonoBehaviour:
   tunnelPrefab: {fileID: 2418343430992677358, guid: bd51739a22cbb9247a7085d6fef571ca, type: 3}
   poiPrefabs:
   - {fileID: 8687187704201345782, guid: 4e4f522c29887cb4098c51253cf5e5bb, type: 3}
+  roadPrefab: {fileID: 3405533384711967788, guid: 5edb363abc50cba4c89865ae02017394, type: 3}
   spawnAnnulusInnerRadius: 50
   spawnAnnulusOuterRadius: 1000
   tunnelSpawnAnnulusInnerRadius: 450
