@@ -13,6 +13,8 @@ class CarMovement : MonoBehaviour
     [SerializeField] float maxSpeedKPH = 100f;
     [SerializeField] float maxFuel = 120f;
 
+    bool movementEnabled = true;
+
     float maxSpeed => maxSpeedKPH / 3.6f; // Convert km/h to m/s
     float accelerationInput = 0f;
     float steerInput = 0f;
@@ -44,6 +46,9 @@ class CarMovement : MonoBehaviour
 
     void BurnFuel()
     {
+        if (!movementEnabled)
+            return;
+
         if (accelerationInput != 0f)
         {
             fuel -= Time.fixedDeltaTime; // Adjust burn rate
@@ -53,6 +58,9 @@ class CarMovement : MonoBehaviour
 
     void ApplyEngineForce()
     {
+        if (!movementEnabled)
+            return;
+
         if (fuel <= 0f)
             return;
 
@@ -118,10 +126,27 @@ class CarMovement : MonoBehaviour
     }
         
 
+    #region Public API
+
     public void SetInput(Vector2 input)
     {
         steerInput = input.x;
         accelerationInput = input.y;
+    }
+
+    public bool IsMoving()
+    {
+        return Mathf.Abs(rb.linearVelocity.magnitude) > 0.1f;
+    }
+
+    public void EnableMovement(bool enabled)
+    {
+        movementEnabled = enabled;
+    }
+
+    public void AddFuel(float amount)
+    {
+        fuel = Mathf.Min(fuel + amount, maxFuel);
     }
 
     public void Refuel()
@@ -143,4 +168,6 @@ class CarMovement : MonoBehaviour
     {
         return GetCurrentSpeed() * 3.6f; // Convert m/s to km/h
     }
+
+    #endregion
 }

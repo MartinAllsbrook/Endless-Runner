@@ -7,6 +7,7 @@ public class FillBar : MonoBehaviour
     [SerializeField] RectTransform fillTransform;
     [SerializeField] Image fillImage;
     [SerializeField] Gradient fullToEmptyGradient;
+    [SerializeField] bool horizontal = false;
 
     float fill = 1f;
 
@@ -23,7 +24,11 @@ public class FillBar : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        fillTransform.localScale = new Vector3(1f, fill, 1f);
+        if (horizontal)
+            fillTransform.localScale = new Vector3(fill, 1f, 1f);
+        else
+            fillTransform.localScale = new Vector3(1f, fill, 1f);
+        
         fillImage.color = fullToEmptyGradient.Evaluate(fill);
     }
 }
