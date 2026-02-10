@@ -2,9 +2,8 @@ using UnityEngine;
 
 class GasStationPOI : PointOfInterest
 {
-    protected override void OnPlayerEnter()
+    public void RefuelPlayer()
     {
-        // Refuel the player's car
         if (Player.Instance != null)
         {
             CarMovement carMovement = Player.Instance.GetComponent<CarMovement>();
@@ -12,6 +11,15 @@ class GasStationPOI : PointOfInterest
             {
                 carMovement.Refuel();
             }
+        }
+    }
+
+    public void ScavengeForParts()
+    {
+        if (Player.Instance != null)
+        {
+            // Implement scavenging logic here, e.g., give the player some random parts or upgrades
+            Debug.Log("Scavenged for parts!");
         }
     }
 }

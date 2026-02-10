@@ -11,10 +11,19 @@ struct ConnectionPoint
 [RequireComponent(typeof(Collider2D))]
 abstract class PointOfInterest : MonoBehaviour
 {
+    [Header("Generation Settings")]
     [SerializeField] int countInWorld = 3;
     [SerializeField] float radius = 10f;
+
+    [Header("Map")]
     [SerializeField] Sprite mapIcon;
+    
+    [Header("Road Connections")]
     [SerializeField] Transform[] roadConnectionPoints;
+    
+    [Header("Interaction")]
+    [SerializeField] Canvas interactionCanvas;
+    [SerializeField] Transform interactionCanvasPivot;
 
     ConnectionPoint[] connectionPoints;
     public int CountInWorld => countInWorld;
@@ -36,6 +45,7 @@ abstract class PointOfInterest : MonoBehaviour
             return true;
         }
     }
+
     public ConnectionPoint[] ConnectionPoints => connectionPoints;
 
     void Awake()
@@ -47,6 +57,14 @@ abstract class PointOfInterest : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (interactionCanvasPivot != null)
+        {
+            interactionCanvasPivot.rotation = Quaternion.identity; // Keep canvas upright
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -55,5 +73,28 @@ abstract class PointOfInterest : MonoBehaviour
         }
     }
 
-    protected abstract void OnPlayerEnter();
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            OnPlayerExit();
+        }
+    }
+
+    protected virtual void OnPlayerEnter()
+    {
+        if (interactionCanvas != null)
+        {
+            interactionCanvas.gameObject.SetActive(true);
+            // EventSystem.current.SetSelectedGameObject(interactionCanvas.gameObject); // IDK what this does
+        }
+    }
+
+    protected virtual void OnPlayerExit()
+    {
+        if (interactionCanvas != null)
+        {
+            interactionCanvas.gameObject.SetActive(false);
+        }
+    }
 }

@@ -97,7 +97,7 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   m_LocalAABB:
     m_Center: {x: 0, y: 16, z: 0}
-    m_Extent: {x: 8, y: 16, z: 0}
+    m_Extent: {x: 9.142858, y: 16, z: 0}
   m_SpriteSortPoint: 0
 --- !u!114 &1118743601577927690
 MonoBehaviour:
@@ -266,7 +266,7 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   m_LocalAABB:
     m_Center: {x: 0, y: 16, z: 0}
-    m_Extent: {x: 8, y: 16, z: 0}
+    m_Extent: {x: 9.142858, y: 16, z: 0}
   m_SpriteSortPoint: 0
 --- !u!114 &2100003797802394536
 MonoBehaviour:
@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 3405533384711967788}
   m_Layer: 0
   m_Name: Road
-  m_TagString: Untagged
+  m_TagString: Road
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -444,5 +444,5 @@ MonoBehaviour:
   tangentStrength: 20
   curviness: 0
   curveFrequency: 0.05
-  roadWidth: 16
+  roadWidth: 19
   colliderResolution: 16

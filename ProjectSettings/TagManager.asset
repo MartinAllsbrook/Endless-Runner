@@ -8,6 +8,8 @@ TagManager:
   - World Object
   - Tunnel
   - Scatter
+  - POI Area
+  - Road
   layers:
   - Default
   - TransparentFX

@@ -72,4 +72,12 @@ public class ScatterObject : MonoBehaviour, IPoolable<ScatterObject>
             gameObject.SetActive(false);
         }
     }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Road") || collision.CompareTag("POI Area"))
+        {
+            ReturnToPool();
+        }
+    }
 }
