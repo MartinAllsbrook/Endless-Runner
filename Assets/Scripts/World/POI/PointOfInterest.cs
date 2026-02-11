@@ -15,15 +15,10 @@ abstract class PointOfInterest : MonoBehaviour
     [SerializeField] int countInWorld = 3;
     [SerializeField] float radius = 10f;
 
-    [Header("Map")]
+    [Header("General References")]
     [SerializeField] Sprite mapIcon;
-    
-    [Header("Road Connections")]
     [SerializeField] Transform[] roadConnectionPoints;
-    
-    [Header("Interaction")]
-    [SerializeField] Canvas interactionCanvas;
-    [SerializeField] Transform interactionCanvasPivot;
+    [SerializeField] POIInteractionUI interactionUI;
 
     ConnectionPoint[] connectionPoints;
     public int CountInWorld => countInWorld;
@@ -33,6 +28,8 @@ abstract class PointOfInterest : MonoBehaviour
     List<PointOfInterest> connectedPOIs = new List<PointOfInterest>();
     public List<PointOfInterest> ConnectedPOIs => connectedPOIs;
     
+    bool playerInside = false;
+
     public bool AllPointsConnected
     {
         get
@@ -48,20 +45,16 @@ abstract class PointOfInterest : MonoBehaviour
 
     public ConnectionPoint[] ConnectionPoints => connectionPoints;
 
+    #region Unity
+
     void Awake()
     {
+        interactionUI.gameObject.SetActive(false);
+
         connectionPoints = new ConnectionPoint[roadConnectionPoints.Length];
         for (int i = 0; i < roadConnectionPoints.Length; i++)
         {
             connectionPoints[i] = new ConnectionPoint { Point = roadConnectionPoints[i], Connected = false };
-        }
-    }
-
-    void Update()
-    {
-        if (interactionCanvasPivot != null)
-        {
-            interactionCanvasPivot.rotation = Quaternion.identity; // Keep canvas upright
         }
     }
 
@@ -81,20 +74,23 @@ abstract class PointOfInterest : MonoBehaviour
         }
     }
 
+    #endregion
+
     protected virtual void OnPlayerEnter()
     {
-        if (interactionCanvas != null)
+        if (interactionUI != null)
         {
-            interactionCanvas.gameObject.SetActive(true);
-            // EventSystem.current.SetSelectedGameObject(interactionCanvas.gameObject); // IDK what this does
+            interactionUI.gameObject.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(interactionUI.gameObject);
         }
     }
 
     protected virtual void OnPlayerExit()
     {
-        if (interactionCanvas != null)
+        if (interactionUI != null)
         {
-            interactionCanvas.gameObject.SetActive(false);
+            interactionUI.gameObject.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 }

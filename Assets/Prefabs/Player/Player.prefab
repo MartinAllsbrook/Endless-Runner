@@ -124,6 +124,7 @@ Transform:
   - {fileID: 4829286287831498973}
   - {fileID: 143250938249942541}
   - {fileID: 8102468707641867716}
+  - {fileID: 9121930145852532015}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8074523175339371606
@@ -138,7 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510cfca45e0fcf148bc633ee1091a0b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  guns: []
+  guns:
+  - {fileID: 2628684358431440548}
   collisionDamageFactor: 0.003
 --- !u!114 &4262848981007413409
 MonoBehaviour:
@@ -617,6 +619,79 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1001 &1460419810898292878
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3194791642850458528}
+    m_Modifications:
+    - target: {fileID: 6780658099156239086, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_Name
+      value: SwivelTurret
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+--- !u!114 &2628684358431440548 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3476359361426050602, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+  m_PrefabInstance: {fileID: 1460419810898292878}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559629649051b424c9bd4fb71ee5ceb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwivelGun
+--- !u!4 &9121930145852532015 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7697759210477360545, guid: 5dc5e659484abb7459f66e0b2bf9cb4a, type: 3}
+  m_PrefabInstance: {fileID: 1460419810898292878}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2463544990428403420
 PrefabInstance:
   m_ObjectHideFlags: 0

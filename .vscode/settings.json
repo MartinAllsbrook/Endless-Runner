@@ -70,6 +70,7 @@
     "dotnet.defaultSolution": "Endless Runner.slnx",
     "cSpell.words": [
         "Collidable",
+        "interactable",
         "pois",
         "Poolable"
     ]
