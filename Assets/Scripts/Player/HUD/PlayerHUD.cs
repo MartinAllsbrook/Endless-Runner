@@ -1,8 +1,12 @@
+using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerHUD : MonoBehaviour
 {
+    public static PlayerHUD Instance { get; private set; }
+
     [SerializeField] FillBar healthBar;
     [SerializeField] FillBar fuelBar;
     [SerializeField] TextMeshProUGUI scrapCount;
@@ -11,6 +15,19 @@ public class PlayerHUD : MonoBehaviour
     Health playerHealth;
     CarMovement carMovement;
     Inventory inventory;
+
+    InteractionUI interactionUI;
+    public static event Action OnExitInteraction;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     void Start()
     {
@@ -42,5 +59,22 @@ public class PlayerHUD : MonoBehaviour
         // Update speed display
         float speed = carMovement.GetCurrentSpeedKPH();
         speedText.text = $"{speed:0} km/h";
+    }
+
+    public void EnterInteraction(InteractionUI interactionUIPrefab)
+    {
+        interactionUI = Instantiate(interactionUIPrefab, transform);
+        interactionUI.OnExit += ExitInteraction;
+    }   
+
+    public void ExitInteraction()
+    {
+        if (interactionUI != null)
+        {
+            interactionUI.OnExit -= ExitInteraction;
+            Destroy(interactionUI.gameObject);
+        }
+
+        OnExitInteraction?.Invoke();
     }
 }

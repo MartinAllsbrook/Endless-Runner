@@ -5,13 +5,9 @@ using UnityEngine.UI;
 
 class POIInteractionUI : MonoBehaviour
 {
-    [Header("Panels")]
     [SerializeField] GameObject waitingToStopPanel;
-    [SerializeField] GameObject interactionPanel;
-
-    [Header("Buttons")]
+    [SerializeField] InteractionUI interactionUIPrefab;
     [SerializeField] Button enterInteractionButton;
-    [SerializeField] Button exitInteractionButton;
 
     bool playerMoving = false;
     bool inInteraction = false;
@@ -21,9 +17,7 @@ class POIInteractionUI : MonoBehaviour
     void OnEnable()
     {
         waitingToStopPanel.SetActive(true);
-        interactionPanel.SetActive(false);
 
-        exitInteractionButton.onClick.AddListener(ExitInteraction);
         enterInteractionButton.onClick.AddListener(EnterInteraction);
 
         if (Player.Instance != null)
@@ -34,7 +28,6 @@ class POIInteractionUI : MonoBehaviour
 
     void OnDisable()
     {
-        exitInteractionButton.onClick.RemoveListener(ExitInteraction);
         enterInteractionButton.onClick.RemoveListener(EnterInteraction);
     }
 
@@ -79,17 +72,21 @@ class POIInteractionUI : MonoBehaviour
     {
         inInteraction = true;
         playerMovement.EnableMovement(false);
-
         waitingToStopPanel.SetActive(false);
-        interactionPanel.SetActive(true);
+
+        if (PlayerHUD.Instance != null)
+        {
+            PlayerHUD.Instance.EnterInteraction(interactionUIPrefab);
+        }
+        PlayerHUD.OnExitInteraction += ExitInteraction;
     }
 
     void ExitInteraction()
     {
         inInteraction = false;
         playerMovement.EnableMovement(true);
-
         waitingToStopPanel.SetActive(true);
-        interactionPanel.SetActive(false);
+
+        PlayerHUD.OnExitInteraction -= ExitInteraction;
     }
 }
